@@ -409,7 +409,9 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
 | F1 | quieres equilibrio | optimizar solo una parte del problema |
 
 </div>
+
 </div>
+
 ---
 
 # Ejemplo numérico de clasificación (paso a paso)
