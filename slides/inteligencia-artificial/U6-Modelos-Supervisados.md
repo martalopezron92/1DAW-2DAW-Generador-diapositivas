@@ -472,7 +472,9 @@ Supón 100 intentos de login y este resultado:
 | R² | 1 = perfecto, 0 ≈ predecir media | depende del contexto |
 
 </div>
+
 </div>
+
 ---
 
 # Ejemplo numérico de regresión (visitas web)
