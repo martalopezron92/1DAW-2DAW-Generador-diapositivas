@@ -27,6 +27,7 @@ description: Introducción didáctica para alumnado de DAW
 - El objetivo: aprender una regla para **predecir y en datos nuevos**.
 
 <svg width="940" height="280" viewBox="0 0 940 280" xmlns="http://www.w3.org/2000/svg">
+
   <rect x="20" y="40" width="250" height="180" rx="14" fill="#eff6ff" stroke="#93c5fd"/>
   <text x="45" y="80" font-size="24" fill="#1e3a8a">Datos etiquetados</text>
   <text x="45" y="118" font-size="19" fill="#334155">X: features</text>
@@ -97,10 +98,14 @@ Diferencia fundamental: <strong>categorías</strong> (clasificación) vs <strong
 
 # Ejemplo visual de clasificación (spam / no spam)
 
-<div class="two-cols">
-<div>
 
-<svg width="560" height="320" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+**Interpretación**: el modelo aprende una frontera que separa las dos clases. 
+
+
+<div class="two-cols">
+  <div>
+  <svg width="560" height="320" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+
   <rect x="45" y="25" width="470" height="250" fill="#ffffff" stroke="#cbd5e1"/>
   <line x1="70" y1="250" x2="490" y2="250" stroke="#334155" stroke-width="2"/>
   <line x1="70" y1="250" x2="70" y2="45" stroke="#334155" stroke-width="2"/>
@@ -111,7 +116,6 @@ Diferencia fundamental: <strong>categorías</strong> (clasificación) vs <strong
   <circle cx="155" cy="195" r="7" fill="#2563eb"/>
   <circle cx="185" cy="215" r="7" fill="#2563eb"/>
   <circle cx="220" cy="190" r="7" fill="#2563eb"/>
-
   <circle cx="340" cy="120" r="7" fill="#dc2626"/>
   <circle cx="390" cy="100" r="7" fill="#dc2626"/>
   <circle cx="425" cy="130" r="7" fill="#dc2626"/>
@@ -119,41 +123,41 @@ Diferencia fundamental: <strong>categorías</strong> (clasificación) vs <strong
 
   <line x1="280" y1="245" x2="300" y2="50" stroke="#7c3aed" stroke-width="4"/>
   <text x="305" y="88" font-size="15" fill="#6d28d9">frontera de decisión</text>
-
   <rect x="90" y="18" width="14" height="14" fill="#2563eb"/>
   <text x="110" y="30" font-size="15" fill="#334155">No spam</text>
   <rect x="185" y="18" width="14" height="14" fill="#dc2626"/>
   <text x="205" y="30" font-size="15" fill="#334155">Spam</text>
-</svg>
 
-<p class="caption">Interpretación: el modelo aprende una frontera que separa las dos clases.</p>
+  </svg>
 
+  </div>
+  <div>
+
+  | Enlaces | Mayúsculas | y |
+  |---:|---:|---|
+  | 1 | 4 | no spam |
+  | 2 | 6 | no spam |
+  | 7 | 18 | spam |
+  | 9 | 22 | spam |
+  | 3 | 5 | no spam |
+  | 8 | 20 | spam |
+
+  - Dato nuevo: (6 enlaces, 17 mayúsculas)
+  - Predicción probable: **spam**
+
+  </div>
 </div>
-<div>
 
-| Enlaces | Mayúsculas | y |
-|---:|---:|---|
-| 1 | 4 | no spam |
-| 2 | 6 | no spam |
-| 7 | 18 | spam |
-| 9 | 22 | spam |
-| 3 | 5 | no spam |
-| 8 | 20 | spam |
-
-- Dato nuevo: (6 enlaces, 17 mayúsculas)
-- Predicción probable: **spam**
-
-</div>
-</div>
 
 ---
 
 # Ejemplo visual de regresión (visitas web)
 
 <div class="two-cols">
-<div>
+  <div>
 
-<svg width="560" height="320" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+  <svg width="560" height="320" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+
   <rect x="45" y="25" width="470" height="250" fill="#ffffff" stroke="#cbd5e1"/>
   <line x1="70" y1="250" x2="490" y2="250" stroke="#334155" stroke-width="2"/>
   <line x1="70" y1="250" x2="70" y2="45" stroke="#334155" stroke-width="2"/>
@@ -170,11 +174,12 @@ Diferencia fundamental: <strong>categorías</strong> (clasificación) vs <strong
 
   <line x1="100" y1="230" x2="445" y2="105" stroke="#10b981" stroke-width="4"/>
   <text x="286" y="126" font-size="15" fill="#047857">línea de tendencia</text>
-</svg>
+  </svg>
 
-<p class="caption">Interpretación: al aumentar la inversión, el modelo estima más visitas.</p>
+  <p class="caption">Interpretación: al aumentar la inversión, el modelo estima más visitas.</p>
 
 </div>
+
 <div>
 
 | Inversión ads (€) | Visitas/hora |
@@ -189,6 +194,7 @@ Diferencia fundamental: <strong>categorías</strong> (clasificación) vs <strong
 - Predicción aproximada: **180 visitas/hora**
 
 </div>
+
 </div>
 
 ---
@@ -223,16 +229,26 @@ Diferencia fundamental: <strong>categorías</strong> (clasificación) vs <strong
 
 # Generalización: el objetivo real
 
+<div class=two-cols>
+
+<div>
+
 - **Generalizar** = rendir bien en datos no vistos.
 - Un buen modelo capta patrones, no detalles irrelevantes.
+- El clasificador A generaliza mejor.
+- El clasificador B parece “perfecto” en train, pero falla fuera.
+
+</div>
+
+<div>
 
 | Métrica | Entrenamiento | Test |
 |---|---:|---:|
 | Accuracy clasificador A | 96% | 94% |
 | Accuracy clasificador B | 100% | 71% |
 
-- El clasificador A generaliza mejor.
-- El clasificador B parece “perfecto” en train, pero falla fuera.
+</div>
+</div>
 
 <div class="kpi">
 Objetivo en ML supervisado: minimizar error en producción, no solo en entrenamiento.
@@ -251,6 +267,8 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
   - Error alto en test.
   - Curva de decisión excesivamente compleja.
 
+<br>
+
 | Conjunto | Error |
 |---|---:|
 | Train | 2% |
@@ -260,18 +278,20 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
 <div>
 
 <svg width="520" height="300" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
-  <rect x="40" y="25" width="430" height="220" fill="#fff" stroke="#cbd5e1"/>
-  <line x1="65" y1="220" x2="445" y2="220" stroke="#334155" stroke-width="2"/>
-  <line x1="65" y1="220" x2="65" y2="45" stroke="#334155" stroke-width="2"/>
-  <path d="M70,190 C120,60 150,220 200,90 C240,20 290,250 330,100 C360,40 410,200 440,90" fill="none" stroke="#dc2626" stroke-width="4"/>
-  <circle cx="95" cy="180" r="5" fill="#2563eb"/>
-  <circle cx="130" cy="150" r="5" fill="#2563eb"/>
-  <circle cx="170" cy="170" r="5" fill="#2563eb"/>
-  <circle cx="220" cy="130" r="5" fill="#2563eb"/>
-  <circle cx="270" cy="140" r="5" fill="#2563eb"/>
-  <circle cx="320" cy="120" r="5" fill="#2563eb"/>
-  <circle cx="380" cy="130" r="5" fill="#2563eb"/>
-  <text x="85" y="262" font-size="15" fill="#334155">Curva demasiado compleja</text>
+
+<rect x="40" y="25" width="430" height="220" fill="#fff" stroke="#cbd5e1"/>
+<line x1="65" y1="220" x2="445" y2="220" stroke="#334155" stroke-width="2"/>
+<line x1="65" y1="220" x2="65" y2="45" stroke="#334155" stroke-width="2"/>
+<path d="M70,190 C120,60 150,220 200,90 C240,20 290,250 330,100 C360,40 410,200 440,90" fill="none" stroke="#dc2626" stroke-width="4"/>
+<circle cx="95" cy="180" r="5" fill="#2563eb"/>
+<circle cx="130" cy="150" r="5" fill="#2563eb"/>
+<circle cx="170" cy="170" r="5" fill="#2563eb"/>
+<circle cx="220" cy="130" r="5" fill="#2563eb"/>
+<circle cx="270" cy="140" r="5" fill="#2563eb"/>
+<circle cx="320" cy="120" r="5" fill="#2563eb"/>
+<circle cx="380" cy="130" r="5" fill="#2563eb"/>
+<text x="85" y="262" font-size="15" fill="#334155">Curva demasiado compleja</text>
+
 </svg>
 
 <p class="caption">Analogía útil: memorizar respuestas de examen sin entender el tema.</p>
@@ -292,6 +312,8 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
   - Error también alto en test.
   - No captura relaciones importantes.
 
+<br>
+
 | Conjunto | Error |
 |---|---:|
 | Train | 19% |
@@ -301,6 +323,7 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
 <div>
 
 <svg width="520" height="300" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
+
   <rect x="40" y="25" width="430" height="220" fill="#fff" stroke="#cbd5e1"/>
   <line x1="65" y1="220" x2="445" y2="220" stroke="#334155" stroke-width="2"/>
   <line x1="65" y1="220" x2="65" y2="45" stroke="#334155" stroke-width="2"/>
@@ -330,15 +353,29 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
 - **Falso positivo (FP)**: el modelo dice “sí” cuando era “no”.
 - **Falso negativo (FN)**: el modelo dice “no” cuando era “sí”.
 
+<br>
+
+<div class="two-cols">
+
+<div>
+
 | Real \ Predicho | Positivo | Negativo |
 |---|---:|---:|
 | Positivo | Verdadero positivo (VP) | **Falso negativo (FN)** |
 | Negativo | **Falso positivo (FP)** | Verdadero negativo (VN) |
 
+</div>
+
+<div>
+
 | Contexto seguridad web: “login fraudulento” | Impacto |
 |---|---|
 | FP (bloquear usuario legítimo) | mala experiencia y soporte extra |
 | FN (dejar pasar fraude real) | riesgo económico y reputacional |
+
+</div>
+
+</div>
 
 <div class="kpi">Diseñar modelos implica decidir qué error duele más en tu caso de negocio.</div>
 
@@ -347,6 +384,10 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
 # Métricas en clasificación: qué mide cada una
 
 <span class="tag class">Clasificación</span>
+
+<div class = "two-cols">
+
+<div>
 
 - **Accuracy**: proporción de aciertos totales.
   - Fórmula: (VP + VN) / Total
@@ -357,6 +398,9 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
 - **F1-score**: equilibrio entre precision y recall.
   - Fórmula: 2 · (Precision · Recall) / (Precision + Recall)
 
+</div>
+<div>
+
 | Métrica | Útil cuando... | Riesgo si la ignoras |
 |---|---|---|
 | Accuracy | clases equilibradas | puede ocultar errores en clase minoritaria |
@@ -364,6 +408,8 @@ Objetivo en ML supervisado: minimizar error en producción, no solo en entrenami
 | Recall | FN son críticos | dejar pasar casos peligrosos |
 | F1 | quieres equilibrio | optimizar solo una parte del problema |
 
+</div>
+</div>
 ---
 
 # Ejemplo numérico de clasificación (paso a paso)
@@ -402,11 +448,19 @@ Supón 100 intentos de login y este resultado:
 
 <span class="tag reg">Regresión</span>
 
+<div class = "two-cols">
+
+<div>
+
 - **Error residual** = valor real − valor predicho.
 - **MAE** (error absoluto medio): media de |error|.
 - **MSE** (error cuadrático medio): media de error².
 - **RMSE**: raíz de MSE, vuelve a la unidad original.
 - **R²**: porcentaje de variabilidad explicado por el modelo.
+
+</div>
+
+<div>
 
 | Métrica | Cómo se interpreta | Sensibilidad a outliers |
 |---|---|---|
@@ -415,9 +469,15 @@ Supón 100 intentos de login y este resultado:
 | RMSE | similar a MAE, pero castiga más grandes | alta |
 | R² | 1 = perfecto, 0 ≈ predecir media | depende del contexto |
 
+</div>
+</div>
 ---
 
 # Ejemplo numérico de regresión (visitas web)
+
+<div class = "two-cols">
+
+<div>
 
 | Hora | Real (y) | Predicción (ŷ) | Error (y-ŷ) | Valor absoluto del Error | Error² |
 |---:|---:|---:|---:|---:|---:|
@@ -427,10 +487,16 @@ Supón 100 intentos de login y este resultado:
 | 13:00 | 200 | 190 | 10 | 10 | 100 |
 | 14:00 | 210 | 205 | 5 | 5 | 25 |
 
+</div>
+
+<div>
+
 - MAE = (10+10+10+10+5)/5 = **9 visitas**
 - MSE = (100+100+100+100+25)/5 = **85**
 - RMSE = √85 ≈ **9,22 visitas**
 - R² (aprox) = **0,91**
+
+</div>
 
 <div class="kpi">Interpretación práctica: el modelo se equivoca, de media, en unas 9 visitas por hora.</div>
 
@@ -440,11 +506,19 @@ Supón 100 intentos de login y este resultado:
 
 <span class="tag reg">R² en regresión</span>
 
+<div class="two-cols">
+
+<div>
+
 - Paso 1: calcula la media real: $\bar{y}$.
 - Paso 2: calcula:
   - $SS_{tot}=\sum (y_i-\bar{y})^2$ (variación total)
   - $SS_{res}=\sum (y_i-\hat{y}_i)^2$ (error del modelo)
 - Paso 3: aplica la fórmula: $R^2 = 1 - \frac{SS_{res}}{SS_{tot}}$
+
+</div>
+
+<div>
 
 | i | y real | ŷ pred | (y-ŷ)² | (y-ȳ)² |
 |---|---:|---:|---:|---:|
@@ -456,6 +530,10 @@ Supón 100 intentos de login y este resultado:
 
 - $\bar{y}=14$, $SS_{res}=4+1+0+1+1=7$, $SS_{tot}=16+4+0+4+16=40$
 - $R^2 = 1 - 7/40 = 0,825$
+
+</div>
+
+</div>
 
 <div class="kpi">Interpretación: el modelo explica el 82,5% de la variación de y. Cuanto más cerca de 1, mejor ajuste.</div>
 
@@ -479,6 +557,7 @@ Supón 100 intentos de login y este resultado:
 # Mapa conceptual final
 
 <svg width="980" height="430" viewBox="0 0 980 430" xmlns="http://www.w3.org/2000/svg">
+
   <rect x="365" y="170" width="250" height="90" rx="14" fill="#ede9fe" stroke="#c4b5fd"/>
   <text x="390" y="205" font-size="24" fill="#5b21b6">Aprendizaje</text>
   <text x="402" y="236" font-size="24" fill="#5b21b6">supervisado</text>

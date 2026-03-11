@@ -10,38 +10,92 @@
   --bg-soft: #f8fafc;
 }
 
+.two-cols{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.3rem;
+}
+
+.card {
+  border: 1px solid #d2e0f5;
+  border-radius: 10px;
+  background: #f9fbff;
+  padding: 0.4rem 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.08rem 0.3rem;
+  border-radius: 999px;
+  border: 1px solid #b8d0f0;
+  background: #e8f0fb;
+  color: var(--brand);
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+
+.key {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.tight {
+  line-height: 1.05;
+  margin-top: 0;
+  margin-bottom: 0.12rem;
+}
+
 section {
   font-family: 'Segoe UI', 'Inter', 'Roboto', sans-serif;
   color: var(--text);
   background: #ffffff;
-  padding: 48px;
+  padding: 28px;
+  font-size: 32px;
 }
 
 h1,
 h2,
 h3 {
   color: var(--brand);
-  line-height: 1.15;
+  line-height: 1.1;
+  margin: 0 0 0.35em;
 }
 
 h1 {
-  font-size: 1.5rem;
-  border-bottom: 4px solid var(--accent);
-  padding-bottom: 0.35rem;
+  font-size: 2.2rem;
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 0.2rem;
 }
 
 h2 {
-  font-size: 1.1rem;
+  font-size: 1.8rem;
+}
+
+h3 {
+  font-size: 1.3rem;
 }
 
 p,
-li {
-  font-size: 0.8rem;
+li,
+td,
+th {
+  font-size: 0.7rem;
+  line-height: 1.2;
 }
 
 ul,
 ol {
-  margin-left: 0.8rem;
+  margin: 0.35rem 0 0.2rem 0.75rem;
+  padding-left: 0.35rem;
 }
 
 strong {
@@ -50,21 +104,37 @@ strong {
 
 code {
   background: var(--bg-soft);
-  padding: 0.12rem 0.35rem;
-  border-radius: 0.3rem;
+  padding: 0.1rem 0.28rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
 }
 
 a {
   color: var(--accent);
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  margin-top: 0.25rem;
+}
+
+th,
+td {
+  padding: 0.2rem 0.32rem;
+  vertical-align: top;
+}
+
 blockquote {
-  border-left: 5px solid var(--accent);
-  padding: 0.3rem 0.9rem;
+  border-left: 4px solid var(--accent);
+  padding: 0.2rem 0.65rem;
   color: var(--muted);
   background: var(--bg-soft);
+  margin: 0.35rem 0;
 }
 
 footer {
   color: var(--muted);
+  font-size: 0.58rem;
 }
