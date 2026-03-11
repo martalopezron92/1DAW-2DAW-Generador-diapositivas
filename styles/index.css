@@ -1,0 +1,106 @@
+:root {
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --text: #122033;
+  --muted: #4b5a70;
+  --line: #d5deea;
+  --brand: #0f3d75;
+  --brand-soft: #e8f0fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0f3d75, #1b5fb5);
+  color: #fff;
+  padding: 2.5rem 0 2.2rem;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+h1 {
+  margin: 0.4rem 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.subtitle {
+  margin: 0.8rem 0 0;
+  color: #dfe9f9;
+}
+
+.subjects-grid {
+  padding: 1.8rem 0 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1rem;
+}
+
+.subject-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.subject-card h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--brand);
+}
+
+.subject-card ul {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.subject-card a {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--brand-soft);
+  border: 1px solid #d2e0f5;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+}
+
+.subject-card a:hover,
+.subject-card a:focus {
+  outline: none;
+  border-color: #aac3ea;
+  background: #dceafe;
+}
+
+.footer-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .subjects-grid {
+    grid-template-columns: 1fr;
+  }
+}

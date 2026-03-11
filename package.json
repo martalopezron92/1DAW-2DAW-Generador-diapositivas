@@ -1,0 +1,15 @@
+{
+  "name": "generador-diapositivas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generador automático de presentaciones HTML a partir de Markdown con despliegue en GitHub Pages",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "preview": "npm run build && serve dist -l 4173",
+    "serve": "serve dist -l 4173"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.1.2",
+    "serve": "^14.2.4"
+  }
+}
