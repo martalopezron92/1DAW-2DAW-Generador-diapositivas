@@ -3,12 +3,12 @@ marp: true
 theme: default
 paginate: true
 size: 16:9
-title: Tema 3 - Diseno Fisico de Bases de Datos (DDL)
+title: Tema 3 - Diseno Fisico de Bases de Datos (DDL) en Oracle
 description: 1o DAW - Bases de Datos
 ---
 
 # Tema 3: Diseno Fisico de Bases de Datos (DDL)
-### Del modelo relacional a tablas reales en PostgreSQL
+### Del modelo relacional a tablas reales en Oracle
 
 **1o DAW - Bases de Datos**
 
@@ -20,9 +20,9 @@ Al terminar este tema, deberias poder:
 
 - Explicar que es el diseno fisico de una BD relacional.
 - Diferenciar `DDL`, `DML` y `DCL`.
-- Crear y modificar objetos con SQL DDL.
+- Crear y modificar objetos con SQL DDL en Oracle.
 - Aplicar restricciones para garantizar integridad.
-- Tomar decisiones tecnicas con criterio (tipos, claves, indices, vistas).
+- Tomar decisiones tecnicas con criterio (tipos, claves, indices, vistas y secuencias).
 
 > Idea clave: no solo memorizar comandos, sino entender por que se usan.
 
@@ -36,9 +36,9 @@ Al terminar este tema, deberias poder:
 
 En esta fase decidimos:
 
-- Sintaxis real (`PostgreSQL` en nuestro caso).
+- Sintaxis real (`Oracle` en nuestro caso).
 - Tipos de datos concretos.
-- Restricciones, indices, vistas, secuencias.
+- Restricciones, indices, vistas, secuencias y sinonimos.
 
 `Mini recordatorio`: esto afecta a la **estructura**, no a los datos de negocio en si.
 
@@ -54,7 +54,7 @@ Ejemplo simplificado:
 
 - Entidad `Usuario` (E/R)
 - Tabla `usuarios(id_usuario, email, nombre, fecha_alta)` (logico)
-- `CREATE TABLE usuarios (...)` (fisico en PostgreSQL)
+- `CREATE TABLE usuarios (...)` (fisico en Oracle)
 
 Implementar una BD = convertir el diseno logico en objetos reales dentro del SGBD.
 
@@ -66,14 +66,14 @@ Implementar una BD = convertir el diseno logico en objetos reales dentro del SGB
 |---|---|---|
 | Que entidades hay | Si | No |
 | Que relaciones hay | Si | No |
-| Tipo exacto (`VARCHAR(80)` o `TEXT`) | No | Si |
+| Tipo exacto (`VARCHAR2(80)` o `CLOB`) | No | Si |
 | Indices concretos | No | Si |
 | Nombre final de restricciones | No | Si |
 
 Pregunta rapida:
 
 - Elegir que existe `Pedido` es logico o fisico.
-- Elegir indice en `pedidos(fecha_pedido)` es logico o fisico.
+- Elegir un indice en `pedidos(fecha_pedido)` es logico o fisico.
 
 ---
 
@@ -96,8 +96,8 @@ Pregunta rapida:
 ```sql
 -- DDL: crea estructura
 CREATE TABLE categorias (
-    id_categoria INTEGER PRIMARY KEY,
-    nombre VARCHAR(60) NOT NULL
+    id_categoria NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL
 );
 
 -- DML: inserta datos
@@ -118,9 +118,9 @@ Objetos DDL habituales:
 - **Vista**: consulta guardada que se usa como tabla virtual.
 - **Indice**: estructura para acelerar busquedas.
 - **Secuencia**: generador de numeros consecutivos.
-- **Sinonimo**: alias de objeto (comun en Oracle).
+- **Sinonimo**: alias de objeto.
 
-`Nota`: PostgreSQL no tiene `CREATE SYNONYM` nativo como Oracle.
+`Nota didactica`: en Oracle `CREATE SYNONYM` si existe y se usa mucho para simplificar nombres.
 
 ---
 
@@ -129,8 +129,8 @@ Objetos DDL habituales:
 ```sql
 -- Tabla
 CREATE TABLE clientes (
-    id_cliente INTEGER PRIMARY KEY,
-    nombre VARCHAR(80) NOT NULL
+    id_cliente NUMBER PRIMARY KEY,
+    nombre VARCHAR2(80) NOT NULL
 );
 
 -- Vista
@@ -142,7 +142,10 @@ FROM clientes;
 CREATE INDEX idx_clientes_nombre ON clientes(nombre);
 
 -- Secuencia
-CREATE SEQUENCE seq_facturas START 1 INCREMENT 1;
+CREATE SEQUENCE seq_facturas START WITH 1 INCREMENT BY 1;
+
+-- Sinonimo
+CREATE SYNONYM cli FOR clientes;
 ```
 
 ---
@@ -172,22 +175,36 @@ Buenas practicas:
 
 ---
 
-# 5) Crear base de datos y tablas
+# 5) Crear estructura de trabajo en Oracle
 
-## `CREATE DATABASE`
+## En Oracle no se trabaja igual con `CREATE DATABASE`
 
-```sql
--- Suele ejecutarse con usuario administrador
-CREATE DATABASE tienda_daw;
-```
-
-## Conectar y crear esquema de trabajo
+- En el trabajo diario normalmente usamos una BD Oracle ya creada.
+- Lo habitual es crear un **usuario**, que a la vez actua como **esquema**.
 
 ```sql
--- Ya dentro de la BD tienda_daw
-CREATE SCHEMA IF NOT EXISTS ventas;
-SET search_path TO ventas;
+CREATE USER ventas IDENTIFIED BY ventas123;
+GRANT CREATE SESSION, CREATE TABLE, CREATE VIEW,
+      CREATE SEQUENCE, CREATE SYNONYM, CREATE TRIGGER TO ventas;
+ALTER USER ventas QUOTA UNLIMITED ON USERS;
 ```
+
+> Idea clave: en Oracle, **usuario y esquema** suelen ir juntos.
+
+---
+
+# Equivalente al esquema de trabajo
+
+```sql
+-- Opcion habitual: conectarte como el propio usuario ventas
+-- O cambiar el esquema actual en la sesion
+ALTER SESSION SET CURRENT_SCHEMA = ventas;
+```
+
+Comparacion didactica:
+
+- En PostgreSQL era frecuente usar `CREATE SCHEMA` y `SET search_path`.
+- En Oracle el concepto equivalente es trabajar dentro del usuario/esquema correcto.
 
 ---
 
@@ -195,9 +212,9 @@ SET search_path TO ventas;
 
 ```sql
 CREATE TABLE usuarios (
-    id_usuario INTEGER,
-    nombre VARCHAR(80),
-    email VARCHAR(120)
+    id_usuario NUMBER,
+    nombre VARCHAR2(80),
+    email VARCHAR2(120)
 );
 ```
 
@@ -217,17 +234,17 @@ Estructura general:
 ```sql
 -- Tabla simple
 CREATE TABLE marcas (
-    id_marca INTEGER PRIMARY KEY,
-    nombre VARCHAR(60) NOT NULL
+    id_marca NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL
 );
 
 -- Tabla mas completa
 CREATE TABLE productos (
-    id_producto INTEGER PRIMARY KEY,
-    nombre VARCHAR(120) NOT NULL,
-    precio NUMERIC(10,2) NOT NULL,
-    stock INTEGER DEFAULT 0,
-    activo BOOLEAN DEFAULT true
+    id_producto NUMBER PRIMARY KEY,
+    nombre VARCHAR2(120) NOT NULL,
+    precio NUMBER(10,2) NOT NULL,
+    stock NUMBER DEFAULT 0,
+    activo NUMBER(1) DEFAULT 1 CHECK (activo IN (0,1))
 );
 ```
 
@@ -237,11 +254,11 @@ CREATE TABLE productos (
 
 ```sql
 CREATE TABLE usuarios (
-    id_usuario INTEGER PRIMARY KEY,
-    nombre VARCHAR(80) NOT NULL,
-    email VARCHAR(120) NOT NULL UNIQUE,
-    fecha_alta DATE DEFAULT CURRENT_DATE,
-    activo BOOLEAN DEFAULT true
+    id_usuario NUMBER PRIMARY KEY,
+    nombre VARCHAR2(80) NOT NULL,
+    email VARCHAR2(120) NOT NULL UNIQUE,
+    fecha_alta DATE DEFAULT SYSDATE,
+    activo NUMBER(1) DEFAULT 1 CHECK (activo IN (0,1))
 );
 ```
 
@@ -254,19 +271,19 @@ A partir de aqui iremos construyendo:
 
 ---
 
-# 6) Tipos de datos en PostgreSQL
+# 6) Tipos de datos en Oracle
 
 Tipos frecuentes:
 
-- `INTEGER`: enteros.
-- `NUMERIC(p,s)`: decimales exactos (dinero).
-- `VARCHAR(n)`: texto con limite.
-- `TEXT`: texto sin limite practico.
-- `DATE`: fecha.
-- `TIMESTAMP`: fecha y hora.
-- `BOOLEAN`: `true` / `false`.
+- `NUMBER`: enteros y decimales.
+- `NUMBER(p,s)`: decimales exactos (dinero).
+- `VARCHAR2(n)`: texto con limite.
+- `CLOB`: texto largo.
+- `DATE`: fecha y hora basica.
+- `TIMESTAMP`: fecha y hora con mas precision.
+- `NUMBER(1)` o `CHAR(1)`: alternativa habitual para valores tipo verdadero/falso.
 
-`Esto garantiza integridad`: elegir bien el tipo evita errores futuros.
+`Nota didactica`: en tablas Oracle no usamos `BOOLEAN` como en PostgreSQL.
 
 ---
 
@@ -274,50 +291,56 @@ Tipos frecuentes:
 
 | Tipo | Usalo para | Ejemplo |
 |---|---|---|
-| `INTEGER` | IDs, contadores | `stock` |
-| `NUMERIC(10,2)` | importes y precios | `precio` |
-| `VARCHAR(120)` | campos con longitud controlada | `email` |
-| `TEXT` | descripciones largas | `descripcion` |
-| `DATE` | solo fecha | `fecha_nacimiento` |
-| `TIMESTAMP` | fecha y hora | `fecha_creacion` |
-| `BOOLEAN` | estados binarios | `activo` |
+| `NUMBER` | IDs, contadores | `stock` |
+| `NUMBER(10,2)` | importes y precios | `precio` |
+| `VARCHAR2(120)` | campos con longitud controlada | `email` |
+| `CLOB` | descripciones largas | `descripcion` |
+| `DATE` | fechas y registros generales | `fecha_nacimiento` |
+| `TIMESTAMP` | auditoria mas precisa | `fecha_creacion` |
+| `NUMBER(1)` | estados binarios | `activo` |
 
 ---
 
-# `VARCHAR` vs `TEXT`
+# `VARCHAR2` vs `CLOB`
 
 ```sql
 CREATE TABLE ejemplo_texto (
-    titulo VARCHAR(150),     -- Limita longitud maxima
-    descripcion TEXT         -- Texto largo sin limite declarado
+    titulo VARCHAR2(150),   -- Limita longitud maxima
+    descripcion CLOB        -- Texto largo
 );
 ```
 
 Comparacion simple:
 
-- `VARCHAR(n)`: util cuando quieres imponer limite por negocio.
-- `TEXT`: util cuando no quieres fijar limite estricto.
-
-En PostgreSQL, rendimiento similar en muchos casos.
+- `VARCHAR2(n)`: util cuando quieres imponer limite por negocio.
+- `CLOB`: util cuando el texto puede ser muy extenso.
 
 ---
 
-# `DATE` vs `TIMESTAMP`
+# `DATE` vs `TIMESTAMP` en Oracle
 
 ```sql
 CREATE TABLE auditoria_demo (
-    fecha_evento DATE,               -- Ej: 2026-03-24
-    instante_evento TIMESTAMP        -- Ej: 2026-03-24 10:15:00
+    fecha_evento DATE,
+    instante_evento TIMESTAMP
 );
 ```
 
-- `DATE`: cuando la hora no importa.
-- `TIMESTAMP`: cuando necesitas orden exacto en el tiempo.
+- `DATE`: guarda fecha y hora con precision de segundos.
+- `TIMESTAMP`: guarda fecha y hora con mayor precision.
 
-Pregunta de comprobacion:
+`Nota importante`: aqui Oracle difiere un poco; `DATE` no es solo dia/mes/ano.
 
-- Para fecha de nacimiento, que usarias.
-- Para registro de login, que usarias.
+---
+
+# Pregunta de comprobacion
+
+Piensa un momento:
+
+- Para `fecha_nacimiento`, que tipo usarias.
+- Para registrar un login exacto, `DATE` o `TIMESTAMP`.
+
+> Lo importante es justificar la decision tecnica.
 
 ---
 
@@ -327,10 +350,10 @@ Pregunta de comprobacion:
 
 ```sql
 CREATE TABLE usuarios (
-    id_usuario INTEGER PRIMARY KEY,
-    nombre VARCHAR(80) NOT NULL,
-    activo BOOLEAN DEFAULT true,
-    fecha_alta DATE DEFAULT CURRENT_DATE
+    id_usuario NUMBER PRIMARY KEY,
+    nombre VARCHAR2(80) NOT NULL,
+    activo NUMBER(1) DEFAULT 1,
+    fecha_alta DATE DEFAULT SYSDATE
 );
 ```
 
@@ -339,6 +362,8 @@ Ventajas:
 - Menos errores manuales.
 - Comportamiento consistente.
 - Codigo de aplicacion mas simple.
+
+`Nota`: `CURRENT_DATE` tambien es valido en Oracle; `SYSDATE` es muy habitual.
 
 ---
 
@@ -376,8 +401,8 @@ Puede declararse:
 
 ```sql
 CREATE TABLE categorias (
-    id_categoria INTEGER PRIMARY KEY,
-    nombre VARCHAR(60) NOT NULL
+    id_categoria NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL
 );
 ```
 
@@ -394,12 +419,12 @@ Caso practico: `email`, `nombre`, `precio` suelen ser `NOT NULL`.
 
 # 10) Restriccion `UNIQUE`
 
-`UNIQUE` evita repetidos, pero permite varios `NULL` segun SGBD.
+`UNIQUE` evita repetidos.
 
 ```sql
 CREATE TABLE usuarios (
-    id_usuario INTEGER PRIMARY KEY,
-    email VARCHAR(120) UNIQUE
+    id_usuario NUMBER PRIMARY KEY,
+    email VARCHAR2(120) UNIQUE
 );
 ```
 
@@ -415,16 +440,16 @@ Diferencia con `PRIMARY KEY`:
 ```sql
 -- Clave primaria simple
 CREATE TABLE usuarios (
-    id_usuario INTEGER PRIMARY KEY,
-    nombre VARCHAR(80) NOT NULL
+    id_usuario NUMBER PRIMARY KEY,
+    nombre VARCHAR2(80) NOT NULL
 );
 ```
 
 ```sql
 -- Clave primaria compuesta
 CREATE TABLE matriculas (
-    id_alumno INTEGER,
-    id_modulo INTEGER,
+    id_alumno NUMBER,
+    id_modulo NUMBER,
     curso CHAR(9),
     CONSTRAINT pk_matriculas PRIMARY KEY (id_alumno, id_modulo, curso)
 );
@@ -449,10 +474,10 @@ Sirve para validar reglas de negocio.
 
 ```sql
 CREATE TABLE productos (
-    id_producto INTEGER PRIMARY KEY,
-    nombre VARCHAR(120) NOT NULL,
-    precio NUMERIC(10,2) NOT NULL,
-    estado VARCHAR(20) NOT NULL,
+    id_producto NUMBER PRIMARY KEY,
+    nombre VARCHAR2(120) NOT NULL,
+    precio NUMBER(10,2) NOT NULL,
+    estado VARCHAR2(20) NOT NULL,
     CONSTRAINT ck_productos_precio CHECK (precio > 0),
     CONSTRAINT ck_productos_estado CHECK (estado IN ('pendiente', 'enviado', 'entregado'))
 );
@@ -462,12 +487,12 @@ CREATE TABLE productos (
 
 # 13) Restriccion `FOREIGN KEY`
 
-Integridad referencial: el valor hijo debe existir en tabla padre.
+Integridad referencial: el valor hijo debe existir en la tabla padre.
 
 ```sql
 CREATE TABLE pedidos (
-    id_pedido INTEGER PRIMARY KEY,
-    id_usuario INTEGER NOT NULL,
+    id_pedido NUMBER PRIMARY KEY,
+    id_usuario NUMBER NOT NULL,
     fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_pedidos_usuarios
         FOREIGN KEY (id_usuario)
@@ -479,7 +504,7 @@ Si `id_usuario` no existe en `usuarios`, el `INSERT` falla.
 
 ---
 
-# ON DELETE: CASCADE, SET NULL, RESTRICT
+# ON DELETE: `CASCADE`, `SET NULL` y comportamiento por defecto
 
 ```sql
 -- Opcion 1: borra hijos automaticamente
@@ -488,15 +513,15 @@ FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 -- Opcion 2: pone FK a NULL
 FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
 
--- Opcion 3: bloquea borrado si hay hijos
-FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE RESTRICT
+-- Opcion 3: no indicar nada
+FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 ```
 
 Comparativa:
 
 - `CASCADE`: comodo, pero peligroso si no controlas.
 - `SET NULL`: conserva historico, requiere columna nullable.
-- `RESTRICT` (o comportamiento por defecto en muchos casos): mas seguro.
+- Sin clausula: Oracle bloquea el borrado si hay hijos.
 
 ---
 
@@ -511,7 +536,7 @@ Vamos a crear un ejemplo coherente y evolutivo:
 Objetivo:
 
 - Aplicar tipos, defaults y restricciones reales.
-- Entender orden correcto de creacion.
+- Entender el orden correcto de creacion.
 
 ---
 
@@ -519,13 +544,14 @@ Objetivo:
 
 ```sql
 CREATE TABLE usuarios (
-    id_usuario INTEGER GENERATED ALWAYS AS IDENTITY,
-    nombre VARCHAR(80) NOT NULL,
-    email VARCHAR(120) NOT NULL,
-    fecha_alta DATE DEFAULT CURRENT_DATE,
-    activo BOOLEAN DEFAULT true,
+    id_usuario NUMBER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR2(80) NOT NULL,
+    email VARCHAR2(120) NOT NULL,
+    fecha_alta DATE DEFAULT SYSDATE,
+    activo NUMBER(1) DEFAULT 1,
     CONSTRAINT pk_usuarios PRIMARY KEY (id_usuario),
-    CONSTRAINT uq_usuarios_email UNIQUE (email)
+    CONSTRAINT uq_usuarios_email UNIQUE (email),
+    CONSTRAINT ck_usuarios_activo CHECK (activo IN (0,1))
 );
 ```
 
@@ -535,14 +561,15 @@ CREATE TABLE usuarios (
 
 ```sql
 CREATE TABLE productos (
-    id_producto INTEGER GENERATED ALWAYS AS IDENTITY,
-    nombre VARCHAR(120) NOT NULL,
-    precio NUMERIC(10,2) NOT NULL,
-    stock INTEGER DEFAULT 0,
-    activo BOOLEAN DEFAULT true,
+    id_producto NUMBER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR2(120) NOT NULL,
+    precio NUMBER(10,2) NOT NULL,
+    stock NUMBER DEFAULT 0,
+    activo NUMBER(1) DEFAULT 1,
     CONSTRAINT pk_productos PRIMARY KEY (id_producto),
     CONSTRAINT ck_productos_precio CHECK (precio > 0),
-    CONSTRAINT ck_productos_stock CHECK (stock >= 0)
+    CONSTRAINT ck_productos_stock CHECK (stock >= 0),
+    CONSTRAINT ck_productos_activo CHECK (activo IN (0,1))
 );
 ```
 
@@ -552,20 +579,21 @@ CREATE TABLE productos (
 
 ```sql
 CREATE TABLE pedidos (
-    id_pedido INTEGER GENERATED ALWAYS AS IDENTITY,
-    id_usuario INTEGER NOT NULL,
+    id_pedido NUMBER GENERATED ALWAYS AS IDENTITY,
+    id_usuario NUMBER NOT NULL,
     fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    estado VARCHAR(20) DEFAULT 'pendiente',
-    total NUMERIC(12,2) DEFAULT 0,
+    estado VARCHAR2(20) DEFAULT 'pendiente',
+    total NUMBER(12,2) DEFAULT 0,
     CONSTRAINT pk_pedidos PRIMARY KEY (id_pedido),
     CONSTRAINT fk_pedidos_usuarios
         FOREIGN KEY (id_usuario)
-        REFERENCES usuarios(id_usuario)
-        ON DELETE RESTRICT,
+        REFERENCES usuarios(id_usuario),
     CONSTRAINT ck_pedidos_estado CHECK (estado IN ('pendiente', 'pagado', 'enviado', 'entregado')),
     CONSTRAINT ck_pedidos_total CHECK (total >= 0)
 );
 ```
+
+`Idea clave`: al no poner `ON DELETE CASCADE`, Oracle impedira borrar un usuario con pedidos asociados.
 
 ---
 
@@ -573,10 +601,10 @@ CREATE TABLE pedidos (
 
 ```sql
 CREATE TABLE lineas_pedido (
-    id_pedido INTEGER NOT NULL,
-    id_producto INTEGER NOT NULL,
-    cantidad INTEGER NOT NULL,
-    precio_unitario NUMERIC(10,2) NOT NULL,
+    id_pedido NUMBER NOT NULL,
+    id_producto NUMBER NOT NULL,
+    cantidad NUMBER NOT NULL,
+    precio_unitario NUMBER(10,2) NOT NULL,
     CONSTRAINT pk_lineas_pedido PRIMARY KEY (id_pedido, id_producto),
     CONSTRAINT fk_lineas_pedido_pedidos
         FOREIGN KEY (id_pedido)
@@ -584,8 +612,7 @@ CREATE TABLE lineas_pedido (
         ON DELETE CASCADE,
     CONSTRAINT fk_lineas_pedido_productos
         FOREIGN KEY (id_producto)
-        REFERENCES productos(id_producto)
-        ON DELETE RESTRICT,
+        REFERENCES productos(id_producto),
     CONSTRAINT ck_lineas_cantidad CHECK (cantidad > 0),
     CONSTRAINT ck_lineas_precio CHECK (precio_unitario > 0)
 );
@@ -625,7 +652,7 @@ COMMENT ON COLUMN pedidos.estado IS
 'Estado del pedido: pendiente, pagado, enviado o entregado';
 ```
 
-Ventaja:
+Ventajas:
 
 - Facilita mantenimiento.
 - Ayuda al equipo y a herramientas de documentacion.
@@ -644,11 +671,11 @@ Operaciones frecuentes:
 ```sql
 -- 1) Anadir columna
 ALTER TABLE usuarios
-ADD COLUMN telefono VARCHAR(20);
+ADD telefono VARCHAR2(20);
 
 -- 2) Ampliar longitud
 ALTER TABLE usuarios
-ALTER COLUMN nombre TYPE VARCHAR(120);
+MODIFY nombre VARCHAR2(120);
 
 -- 3) Eliminar columna innecesaria
 ALTER TABLE usuarios
@@ -657,29 +684,29 @@ DROP COLUMN telefono;
 
 ---
 
-# Ejercicios cortos de ALTER TABLE
+# Ejercicios cortos de `ALTER TABLE`
 
 ```sql
 -- A) Anade una columna de fecha de nacimiento a usuarios
 ALTER TABLE usuarios
-ADD COLUMN fecha_nacimiento DATE;
+ADD fecha_nacimiento DATE;
 
 -- B) Amplia email a 180 caracteres
 ALTER TABLE usuarios
-ALTER COLUMN email TYPE VARCHAR(180);
+MODIFY email VARCHAR2(180);
 
 -- C) Elimina una columna de pruebas
 ALTER TABLE usuarios
-DROP COLUMN IF EXISTS columna_test;
+DROP COLUMN columna_test;
 ```
 
 Pregunta de comprobacion:
 
-- Que comando cambiaria estructura sin tocar filas existentes.
+- Que comando cambiaria la estructura sin tocar las filas existentes.
 
 ---
 
-# 17) Gestion de restricciones con ALTER TABLE
+# 17) Gestion de restricciones con `ALTER TABLE`
 
 `ADD CONSTRAINT` y `DROP CONSTRAINT`:
 
@@ -700,23 +727,19 @@ Crear dentro de `CREATE TABLE` vs despues:
 
 ---
 
-# Nota sobre ENABLE / DISABLE
+# Activar y desactivar restricciones en Oracle
 
-- En Oracle se puede `ENABLE` / `DISABLE CONSTRAINT`.
-- En PostgreSQL no existe ese comando igual.
-- Alternativas en PostgreSQL:
+En Oracle si existe `ENABLE` / `DISABLE CONSTRAINT`.
 
 ```sql
--- Crear FK sin validar historico al principio
 ALTER TABLE pedidos
-ADD CONSTRAINT fk_pedidos_usuarios
-FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
-NOT VALID;
+DISABLE CONSTRAINT fk_pedidos_usuarios;
 
--- Validar cuando te convenga
 ALTER TABLE pedidos
-VALIDATE CONSTRAINT fk_pedidos_usuarios;
+ENABLE CONSTRAINT fk_pedidos_usuarios;
 ```
+
+`Nota didactica`: para casos avanzados tambien existe `ENABLE NOVALIDATE`, pero no funciona igual que el `NOT VALID` de PostgreSQL.
 
 ---
 
@@ -724,13 +747,13 @@ VALIDATE CONSTRAINT fk_pedidos_usuarios;
 
 ```sql
 -- Renombrar tabla
-ALTER TABLE productos RENAME TO articulos;
+RENAME productos TO articulos;
 
 -- Volver al nombre original (si quieres)
-ALTER TABLE articulos RENAME TO productos;
+RENAME articulos TO productos;
 
 -- Borrar tabla completa (estructura + datos)
-DROP TABLE IF EXISTS lineas_pedido;
+DROP TABLE lineas_pedido CASCADE CONSTRAINTS;
 ```
 
 `Cuidado`: `DROP` elimina el objeto completo.
@@ -753,16 +776,16 @@ DROP TABLE IF EXISTS lineas_pedido;
 Que es un indice:
 
 - Estructura auxiliar que acelera busquedas.
-- Similar a indice de libro: evita leer todo.
+- Similar al indice de un libro: evita leer todo.
 
 Ventajas:
 
-- Mejora rendimiento de `WHERE`, `JOIN`, `ORDER BY` (segun caso).
+- Mejora rendimiento de `WHERE`, `JOIN` y `ORDER BY` en muchos casos.
 
 Inconvenientes basicos:
 
 - Ocupa espacio.
-- Hace mas lentos `INSERT/UPDATE/DELETE` al tener que mantenerlo.
+- Hace mas lentos `INSERT/UPDATE/DELETE` porque tambien hay que mantenerlo.
 
 `Mini recordatorio`: esto mejora rendimiento.
 
@@ -779,11 +802,11 @@ CREATE INDEX idx_pedidos_fecha ON pedidos(fecha_pedido);
 ```
 
 Sin indice: escaneo completo de tabla.
-Con indice: acceso mas rapido (cuando el planificador lo considera util).
+Con indice: acceso mas rapido cuando el optimizador lo considera util.
 
 Mini pregunta:
 
-- Pondrias indice en una columna booleana con solo dos valores.
+- Pondrias un indice en una columna con solo dos valores posibles.
 
 ---
 
@@ -813,23 +836,58 @@ JOIN usuarios u ON u.id_usuario = p.id_usuario;
 Que es una secuencia:
 
 - Objeto que genera numeros incrementales.
-- Muy util para IDs.
+- Muy util para IDs en Oracle.
 
 ```sql
 CREATE SEQUENCE seq_facturas START WITH 1000 INCREMENT BY 1;
 
 -- Uso manual
-SELECT nextval('seq_facturas');
+SELECT seq_facturas.NEXTVAL
+FROM dual;
 ```
 
-En PostgreSQL tambien puedes usar:
-
-- `GENERATED ... AS IDENTITY` (recomendado hoy).
-- `SERIAL` (forma historica).
+`Idea clave`: en Oracle `dual` se usa mucho en consultas de apoyo como esta.
 
 ---
 
-# 22) Diccionario de datos
+# Identity vs secuencia + trigger
+
+Dos formas habituales de generar IDs en Oracle:
+
+```sql
+-- Opcion actual (Oracle 12c+)
+id_usuario NUMBER GENERATED ALWAYS AS IDENTITY
+```
+
+```sql
+-- Opcion clasica
+CREATE SEQUENCE seq_usuarios START WITH 1 INCREMENT BY 1;
+```
+
+- **Identity**: mas simple para casos normales.
+- **Secuencia + trigger**: muy comun en sistemas heredados.
+
+---
+
+# Ejemplo breve de secuencia + trigger
+
+```sql
+CREATE OR REPLACE TRIGGER bi_usuarios
+BEFORE INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+    IF :NEW.id_usuario IS NULL THEN
+        :NEW.id_usuario := seq_usuarios.NEXTVAL;
+    END IF;
+END;
+/
+```
+
+`Pregunta de comprobacion`: si tu version de Oracle es moderna, cual de las dos opciones elegirias.
+
+---
+
+# 22) Diccionario de datos en Oracle
 
 El diccionario de datos guarda metadatos:
 
@@ -843,26 +901,24 @@ Por que importa:
 - Permite auditar y documentar estructura real.
 - Facilita mantenimiento y troubleshooting.
 
-Conceptualmente equivalente a vistas de catalogo en Oracle.
-
 ---
 
-# Consultas utiles al diccionario (PostgreSQL)
+# Consultas utiles al diccionario
 
 ```sql
--- 1) Ver tablas del esquema actual
+-- 1) Ver tablas del usuario actual
 SELECT table_name
-FROM information_schema.tables
-WHERE table_schema = 'ventas'
+FROM user_tables
 ORDER BY table_name;
 
 -- 2) Ver columnas y tipos de una tabla
-SELECT column_name, data_type, is_nullable
-FROM information_schema.columns
-WHERE table_schema = 'ventas'
-  AND table_name = 'pedidos'
-ORDER BY ordinal_position;
+SELECT column_name, data_type, nullable
+FROM user_tab_columns
+WHERE table_name = 'PEDIDOS'
+ORDER BY column_id;
 ```
+
+`Nota`: Oracle suele guardar estos nombres en mayusculas.
 
 ---
 
@@ -870,16 +926,14 @@ ORDER BY ordinal_position;
 
 ```sql
 -- 3) Ver restricciones de una tabla
-SELECT tc.constraint_name,
-       tc.constraint_type,
-       kcu.column_name
-FROM information_schema.table_constraints tc
-LEFT JOIN information_schema.key_column_usage kcu
-  ON tc.constraint_name = kcu.constraint_name
- AND tc.table_schema = kcu.table_schema
-WHERE tc.table_schema = 'ventas'
-  AND tc.table_name = 'pedidos'
-ORDER BY tc.constraint_type, tc.constraint_name;
+SELECT uc.constraint_name,
+       uc.constraint_type,
+       ucc.column_name
+FROM user_constraints uc
+LEFT JOIN user_cons_columns ucc
+  ON uc.constraint_name = ucc.constraint_name
+WHERE uc.table_name = 'PEDIDOS'
+ORDER BY uc.constraint_type, uc.constraint_name;
 ```
 
 ---
@@ -887,7 +941,7 @@ ORDER BY tc.constraint_type, tc.constraint_name;
 # 23) Errores frecuentes del alumnado
 
 - Olvidar una coma entre columnas en `CREATE TABLE`.
-- Elegir tipo inadecuado (`TEXT` para importes en vez de `NUMERIC`).
+- Elegir tipo inadecuado (`CLOB` para importes en vez de `NUMBER`).
 - Crear una FK antes de crear la tabla padre.
 - Confundir `PRIMARY KEY` con `UNIQUE`.
 - Usar `DROP` cuando querian `TRUNCATE`.
@@ -895,7 +949,7 @@ ORDER BY tc.constraint_type, tc.constraint_name;
 
 Consejo docente:
 
-- Lee el error completo del SGBD y localiza linea exacta.
+- Lee el error completo del SGBD y localiza la linea exacta.
 
 ---
 
@@ -904,16 +958,16 @@ Consejo docente:
 ```sql
 -- ERROR 1: falta coma
 CREATE TABLE prueba (
-    id INTEGER PRIMARY KEY
-    nombre VARCHAR(50) NOT NULL
+    id NUMBER PRIMARY KEY
+    nombre VARCHAR2(50) NOT NULL
 );
 ```
 
 ```sql
 -- ERROR 2: FK a tabla inexistente (orden incorrecto)
 CREATE TABLE pedidos (
-    id_pedido INTEGER PRIMARY KEY,
-    id_usuario INTEGER REFERENCES usuarios(id_usuario)
+    id_pedido NUMBER PRIMARY KEY,
+    id_usuario NUMBER REFERENCES usuarios(id_usuario)
 );
 ```
 
@@ -926,9 +980,10 @@ Solucion: crear primero `usuarios` y luego `pedidos`.
 Hoy has visto como:
 
 - El diseno logico se convierte en estructura real con `DDL`.
-- `CREATE`, `ALTER`, `DROP`, `TRUNCATE` cambian el esquema.
+- `CREATE`, `ALTER`, `DROP` y `TRUNCATE` cambian el esquema.
 - Restricciones (`PK`, `FK`, `CHECK`, `NOT NULL`, `UNIQUE`) garantizan integridad.
 - Indices mejoran rendimiento y vistas simplifican consultas.
+- Secuencias e `IDENTITY` resuelven la generacion de IDs en Oracle.
 - El diccionario de datos ayuda a inspeccionar y documentar la BD.
 
 ---
@@ -936,14 +991,16 @@ Hoy has visto como:
 # Comandos imprescindibles del tema
 
 ```sql
-CREATE DATABASE ...;
+CREATE USER ...;
+ALTER SESSION SET CURRENT_SCHEMA = ...;
 CREATE TABLE ...;
-ALTER TABLE ... ADD COLUMN ...;
+ALTER TABLE ... ADD ...;
 ALTER TABLE ... ADD CONSTRAINT ...;
 ALTER TABLE ... DROP CONSTRAINT ...;
 CREATE INDEX ... ON ... (...);
 CREATE VIEW ... AS SELECT ...;
 CREATE SEQUENCE ...;
+CREATE SYNONYM ... FOR ...;
 COMMENT ON TABLE ... IS '...';
 DROP TABLE ...;
 TRUNCATE TABLE ...;
@@ -963,13 +1020,13 @@ Contexto: tienda online de material informatico.
 
 Tareas:
 
-1. Crear BD y esquema `ventas`.
+1. Crear el usuario/esquema `ventas`.
 2. Crear tablas `usuarios`, `productos`, `pedidos`, `lineas_pedido`.
-3. Usar tipos correctos (`NUMERIC`, `DATE`, `TIMESTAMP`, `BOOLEAN`).
-4. Anadir `NOT NULL`, `UNIQUE`, `PK`, `FK`, `CHECK`, `DEFAULT`.
+3. Usar tipos correctos (`NUMBER`, `VARCHAR2`, `DATE`, `TIMESTAMP`, `NUMBER(1)`).
+4. Anadir `NOT NULL`, `UNIQUE`, `PK`, `FK`, `CHECK` y `DEFAULT`.
 5. Modificar estructura con `ALTER TABLE` (anadir y cambiar columna).
-6. Crear al menos un indice y una vista de resumen.
-7. Consultar diccionario para listar tablas, columnas y restricciones.
+6. Crear al menos un indice, una vista y una secuencia.
+7. Consultar el diccionario para listar tablas, columnas y restricciones.
 
 Entrega:
 
