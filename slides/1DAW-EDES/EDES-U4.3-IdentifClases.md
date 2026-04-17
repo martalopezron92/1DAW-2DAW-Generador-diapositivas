@@ -1045,6 +1045,7 @@ public class Pila {
     public boolean isEmpty() { return elementos.isEmpty(); }
 }
 ```
+---
 
 # 10 Conclusiones
 
