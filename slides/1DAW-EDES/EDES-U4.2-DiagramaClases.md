@@ -1545,6 +1545,19 @@ public class GestorFacturas {
 
 ---
 
+**Principios de Diseño**:
+- [ ] Alta cohesión en cada clase
+- [ ] Bajo acoplamiento entre clases
+- [ ] Responsabilidad única respetada
+- [ ] Buen encapsulamiento
+
+**Completitud**:
+- [ ] Todos los casos de uso están cubiertos
+- [ ] Todos los requisitos funcionales representados
+- [ ] No hay funcionalidad "huérfana"
+
+---
+
 ## Errores Comunes a Evitar
 
 | Error | Problema | Solución |
@@ -1621,51 +1634,50 @@ public class GestorFacturas {
 # Paso 4: Diagrama de Clases
 
 ```
-┌─────────────┐ 1          0..1 ┌──────────────┐
-│   Cliente   │♦───────────────│  Membresía   │
-│─────────────│  tiene         │──────────────│
-│ - id        │                │ - id         │
-│ - nombre    │                │ - tipo       │
-│ - telefono  │                │ - precio     │
-│ - fechaNac  │                │ - fechaIni   │
-│─────────────│                │ - fechaVenc  │
-│+ getEdad()  │                │──────────────│
-│+ tieneMembr │                │+ estaVigente │
-└─────────────┘                └──────────────┘
-       │1
-       │ realiza
-      *│
-┌──────┴──────┐              ┌──────────────┐
-│   Reserva   │*          1  │    Clase     │
-│─────────────│──────────────│──────────────│
-│ - id        │ para         │ - id         │
-│ - fechaRes  │              │ - nombre     │
-│─────────────│              │ - horario    │
-│+ cancelar() │              │ - capacidad  │
-└─────────────┘              │──────────────│
-       │1                    │+ hayEspacio()│
-       │ tiene               └───────┬──────┘
-       │                             │1
-       │0..1                         │ imparte
-┌──────┴──────┐              ┌───────┴──────┐
-│  Asistencia │              │  Instructor  │
-│─────────────│              │──────────────│
-│ - id        │              │ - id         │
-│ - asistio   │              │ - nombre     │
-│ - fecha     │              │ - especial   │
-│─────────────│              │──────────────│
-│+ marcar()   │              │+ puedImp()   │
-└─────────────┘              └──────────────┘
-
-                          1  *┌──────────┐
-                    ┌─────────│   Sala   │
-                    │se imp en│──────────│
-                    │         │ - id     │
-                    │         │ - nombre │
-                    │         │ - capac  │
-                    │         │──────────│
-                    │         │+ estaDisp│
-                    │         └──────────┘
+┌────────────────────┐      1        *      ┌────────────────────┐
+│      Cliente       │──────────────────────│     Membresia      │
+├────────────────────┤    contrata          ├────────────────────┤
+│ - nombre           │                      │ - tipo             │
+│ - telefono         │                      │ - fechaInicio      │
+│ - fechaNacimiento  │                      │ - fechaFin         │
+├────────────────────┤                      └────────────────────┘
+│ + reservarClase()  │
+└─────────┬──────────┘
+          │ 1
+          │ realiza
+          │ *
+┌─────────┴──────────┐      *        1      ┌────────────────────┐
+│      Reserva       │──────────────────────│   ClaseGrupal      │
+├────────────────────┤      para            ├────────────────────┤
+│ - fechaReserva     │                      │ - tipo             │
+│ - horario          │                      │ - horario          │
+│ - estado           │                      │ - capacidadMax     │
+├────────────────────┤                      ├────────────────────┤
+│ + confirmar()      │                      │ + hayPlaza()       │
+│ + cancelar()       │                      └───────┬─────┬──────┘
+└─────────┬──────────┘                              │1    │1
+          │ 1                                       │     │
+          │ genera                                  │     │
+          │ 0..1                                    │     │
+┌─────────┴──────────┐                              │     │
+│     Asistencia     │                              │     │
+├────────────────────┤                              │     │
+│ - asistio          │                              │     │
+│ - fecha            │                              │     │
+└────────────────────┘                              │     │
+                                                    │     │
+                                         imparte    │     │ seImparteEn
+                                                    │     │
+                                                    │*    │*
+                                      ┌─────────────┘     └─────────────┐
+                                      │                                  │
+                           ┌────────────────────┐             ┌────────────────────┐
+                           │     Instructor     │             │        Sala        │
+                           ├────────────────────┤             ├────────────────────┤
+                           │ - nombre           │             │ - nombre           │
+                           │ - especialidad     │             │ - capacidad        │
+                           │ - disponibilidad   │             └────────────────────┘
+                           └────────────────────┘
 ```
 
 ---
@@ -2004,33 +2016,6 @@ System.out.println("Espacios ocupados: " + clase.obtenerNumeroReservas() + "/" +
 ### Alternativas consideradas:
 - ¿TipoClase como clase vs Enum? → Enum es suficiente
 - ¿Sala como atributo de Clase? → Es entidad con capacidad propia
-
----
-
-# Checklist de Validación antes de terminar
-
-### Estructura:
-- [ ] Cada clase tiene nombre descriptivo
-- [ ] Cada clase tiene responsabilidades claras
-- [ ] No hay clases redundantes
-- [ ] No hay clases "Dios"
-
-### Relaciones:
-- [ ] Todas las relaciones tienen multiplicidad definida
-- [ ] Las relaciones tienen el tipo correcto
-- [ ] No hay dependencias circulares
-- [ ] Las navegabilidades están bien definidas
-
-### Principios de Diseño:
-- [ ] Alta cohesión en cada clase
-- [ ] Bajo acoplamiento entre clases
-- [ ] Responsabilidad única respetada
-- [ ] Buen encapsulamiento
-
-### Completitud:
-- [ ] Todos los casos de uso están cubiertos
-- [ ] Todos los requisitos funcionales representados
-- [ ] No hay funcionalidad "huérfana"
 
 ---
 
