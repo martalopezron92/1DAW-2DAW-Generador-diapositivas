@@ -51,7 +51,10 @@ style: |
     padding: 10px;
     margin: 10px 0;
     font-family: 'Courier New', monospace;
-    text-align: center;
+    text-align: left;
+    white-space: pre;
+    line-height: 1.2;
+    overflow-x: auto;
   }
   .columns {
     display: grid;

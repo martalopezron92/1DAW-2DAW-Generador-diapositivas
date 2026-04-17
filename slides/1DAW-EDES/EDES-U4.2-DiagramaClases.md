@@ -1569,6 +1569,20 @@ public class GestorFacturas {
 
 ## Ejemplo 1: Sistema de Biblioteca
 
+Una biblioteca municipal quiere desarrollar un sistema para gestionar su catálogo de libros y el préstamo a usuarios registrados.
+
+La biblioteca dispone de un nombre y una dirección, y almacena en su sistema todos los libros que forman parte de su catálogo. Cada libro está identificado por su ISBN, y además se quiere guardar su título, autor y si se encuentra disponible o no para préstamo. La biblioteca debe poder buscar libros dentro de su catálogo.
+
+Los usuarios de la biblioteca están registrados en el sistema mediante un identificador, su nombre y su correo electrónico. Un usuario puede solicitar el préstamo de libros y también puede devolverlos.
+
+Cada vez que un usuario toma prestado un libro, el sistema debe generar un préstamo. De cada préstamo se desea almacenar la fecha en la que se realizó, la fecha prevista de devolución y el estado en el que se encuentra el préstamo. Además, el préstamo debe poder calcular una posible multa en función del retraso en la devolución.
+
+Una biblioteca puede contener muchos libros, pero cada libro pertenece a una única biblioteca.
+Un usuario puede tener varios préstamos a lo largo del tiempo, y cada préstamo corresponde a un único usuario.
+Cada préstamo está asociado a un único libro, aunque un mismo libro puede aparecer en distintos préstamos en momentos diferentes.
+
+---
+
 #### Diagrama UML
 
 ```
