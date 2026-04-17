@@ -1585,34 +1585,65 @@ Cada préstamo está asociado a un único libro, aunque un mismo libro puede apa
 
 #### Diagrama UML
 
+
+<pre>
+
 ```
-┌─────────────────┐                    ┌─────────────────┐
-│    Biblioteca   │1                  *│      Libro      │
-│─────────────────│◆───────────────────│─────────────────│
-│ - nombre        │   contiene         │ - isbn          │
-│ - direccion     │                    │ - titulo        │
-│─────────────────│                    │ - autor         │
-│ + buscarLibro() │                    │ - disponible    │
-└─────────────────┘                    │─────────────────│
-                                       │ + prestar()     │
-┌─────────────────┐                    │ + devolver()    │
-│    Usuario      │                    └─────────────────┘
-│─────────────────│                           △
-│ - id            │                           │
-│ - nombre        │                           │ presta
-│ - email         │1                         *│
-│─────────────────│◇─────────────────────────│
-│ + prestarLibro()│   tiene                   │
-│ + devolverLibro │                    ┌──────┴──────────┐
-└─────────────────┘                    │    Prestamo     │
-        │                              │─────────────────│
-        │ genera                       │ - fechaPrestamo │
-        │                              │ - fechaDevol    │
-        │1                            *│ - estado        │
-        │                              │─────────────────│
-        └──────────────────────────────│ + calcularMult()│
-                                       └─────────────────┘
+┌──────────────────────────────────┐
+│            Biblioteca            │
+├──────────────────────────────────┤
+│ - nombre: String                 │
+│ - direccion: String              │
+│ - catalogo: List<Libro>          │
+├──────────────────────────────────┤
+│ + buscarLibro(isbn: String): Libro│
+│ + añadirLibro(libro: Libro): void │
+└───────────────┬──────────────────┘
+                │ 1
+                │ contiene
+                │
+                │ *
+┌───────────────┴──────────────────┐
+│              Libro               │
+├──────────────────────────────────┤
+│ - isbn: String                   │
+│ - titulo: String                 │
+│ - autor: String                  │
+│ - disponible: boolean            │
+├──────────────────────────────────┤
+│ + prestar(): void                │
+│ + devolver(): void               │
+└───────────────┬──────────────────┘
+                │ 1
+                │
+                │
+                │ *
+┌───────────────┴──────────────────┐
+│            Prestamo              │
+├──────────────────────────────────┤
+│ - fechaPrestamo: Date            │
+│ - fechaDevolucion: Date          │
+│ - estado: String                 │
+├──────────────────────────────────┤
+│ + calcularMulta(): double        │
+└───────────────┬──────────────────┘
+                │ *
+                │ genera
+                │
+                │ 1
+┌───────────────┴──────────────────┐
+│             Usuario              │
+├──────────────────────────────────┤
+│ - id: int                        │
+│ - nombre: String                 │
+│ - email: String                  │
+├──────────────────────────────────┤
+│ + prestarLibro(libro: Libro): void│
+│ + devolverLibro(libro: Libro): void│
+└──────────────────────────────────┘
 ```
+
+</pre>
 
 ---
 
@@ -1687,6 +1718,22 @@ class Prestamo {
 ---
 
 ## Ejemplo 2: Sistema de E-Commerce
+
+Una tienda online desea desarrollar un sistema para gestionar el proceso de compra de sus usuarios.
+
+Los usuarios deben registrarse en el sistema mediante un identificador, su nombre y su correo electrónico. Cada usuario puede iniciar sesión en la plataforma y realizar compras.
+
+Cada usuario dispone de un único carrito de compra asociado, en el que puede ir añadiendo productos antes de confirmar la compra. El carrito tiene un identificador y permite calcular el importe total de los productos que contiene. Además, debe permitir agregar productos al carrito y calcular el total de la compra.
+
+El carrito está formado por varios elementos de carrito (ítems), donde cada elemento representa un producto concreto junto con la cantidad seleccionada y el subtotal correspondiente.
+
+Los productos disponibles en la tienda tienen un identificador, un nombre, un precio y una cantidad de stock disponible. El sistema debe poder comprobar si hay stock suficiente antes de realizar una compra.
+
+Cuando un usuario decide finalizar su compra, el sistema genera una orden. Cada orden tiene un número identificativo, una fecha y un estado (por ejemplo, pendiente, procesada o cancelada). La orden puede ser procesada o cancelada.
+
+Cada orden está compuesta por los productos que el usuario ha seleccionado en su carrito en el momento de la compra.
+
+---
 
 #### Diagrama UML
 
