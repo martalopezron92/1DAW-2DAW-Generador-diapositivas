@@ -1586,58 +1586,17 @@ Cada préstamo está asociado a un único libro, aunque un mismo libro puede apa
 #### Diagrama UML
 
 ```
-┌──────────────────────────────────┐
-│            Biblioteca            │
-├──────────────────────────────────┤
-│ - nombre: String                 │
-│ - direccion: String              │
-│ - catalogo: List<Libro>          │
-├──────────────────────────────────┤
-│ + buscarLibro(isbn: String): Libro│
-│ + añadirLibro(libro: Libro): void │
-└───────────────┬──────────────────┘
-                │ 1
-                │ contiene
-                │
-                │ *
-┌───────────────┴──────────────────┐
-│              Libro               │
-├──────────────────────────────────┤
-│ - isbn: String                   │
-│ - titulo: String                 │
-│ - autor: String                  │
-│ - disponible: boolean            │
-├──────────────────────────────────┤
-│ + prestar(): void                │
-│ + devolver(): void               │
-└───────────────┬──────────────────┘
-                │ 1
-                │
-                │
-                │ *
-┌───────────────┴──────────────────┐
-│            Prestamo              │
-├──────────────────────────────────┤
-│ - fechaPrestamo: Date            │
-│ - fechaDevolucion: Date          │
-│ - estado: String                 │
-├──────────────────────────────────┤
-│ + calcularMulta(): double        │
-└───────────────┬──────────────────┘
-                │ *
-                │ genera
-                │
-                │ 1
-┌───────────────┴──────────────────┐
-│             Usuario              │
-├──────────────────────────────────┤
-│ - id: int                        │
-│ - nombre: String                 │
-│ - email: String                  │
-├──────────────────────────────────┤
-│ + prestarLibro(libro: Libro): void│
-│ + devolverLibro(libro: Libro): void│
-└──────────────────────────────────┘
+┌──────────────────────┐   contiene   ┌──────────────────────┐              ┌──────────────────────┐   genera   ┌──────────────────────┐
+│      Biblioteca      │1───────────* │        Libro         │1───────────* │       Prestamo       │*──────────1│       Usuario        │
+├──────────────────────┤              ├──────────────────────┤              ├──────────────────────┤            ├──────────────────────┤
+│ - nombre: String     │              │ - isbn: String       │              │ - fechaPrestamo      │            │ - id: int            │
+│ - direccion: String  │              │ - titulo: String     │              │ - fechaDevolucion    │            │ - nombre: String     │
+│ - catalogo: List<>   │              │ - autor: String      │              │ - estado: String     │            │ - email: String      │
+├──────────────────────┤              │ - disponible:boolean │              ├──────────────────────┤            ├──────────────────────┤
+│ + buscarLibro(...)   │              ├──────────────────────┤              │ + calcularMulta()    │            │ + prestarLibro(...)  │
+│ + añadirLibro(...)   │              │ + prestar()          │              └──────────────────────┘            │ + devolverLibro(...) │
+└──────────────────────┘              │ + devolver()         │                                                    └──────────────────────┘
+                                      └──────────────────────┘
 ```
 
 ---
