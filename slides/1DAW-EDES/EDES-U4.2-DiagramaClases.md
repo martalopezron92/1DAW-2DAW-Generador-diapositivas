@@ -1585,9 +1585,6 @@ Cada préstamo está asociado a un único libro, aunque un mismo libro puede apa
 
 #### Diagrama UML
 
-
-<pre>
-
 ```
 ┌──────────────────────────────────┐
 │            Biblioteca            │
@@ -1642,8 +1639,6 @@ Cada préstamo está asociado a un único libro, aunque un mismo libro puede apa
 │ + devolverLibro(libro: Libro): void│
 └──────────────────────────────────┘
 ```
-
-</pre>
 
 ---
 
