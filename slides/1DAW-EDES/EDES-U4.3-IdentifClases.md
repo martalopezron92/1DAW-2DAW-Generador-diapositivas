@@ -2,8 +2,8 @@
 marp: true
 theme: default
 paginate: true
-header: 'EDES - Unidad 3.3: Identificación de Clases'
-footer: 'UML & Diseño Orientado a Objetos'
+# header: 'EDES - Unidad 3.3: Identificación de Clases'
+# footer: 'UML & Diseño Orientado a Objetos'
 style: |
   section {
     font-size: 22px;
@@ -43,7 +43,6 @@ style: |
 # UD 3.3 - Identificación de Clases
 ## Técnicas, métodos y buenas prácticas para identificar clases a partir de requisitos
 
-**Autor:** Eduardo Fdez  
 **Asignatura:** EDES - Entornos de Desarrollo
 
 ---
@@ -422,6 +421,8 @@ public class Persona {
     private Apellido apellido;
 }
 ```
+
+---
 
 ### ✅ MEJOR: Simplificado
 ```java
@@ -925,6 +926,8 @@ public class Pedido {
 }
 ```
 
+---
+
 ### ✅ BIEN: Respeta Ley de Demeter
 ```java
 public class Cliente {
@@ -962,6 +965,7 @@ CuentaBancaria cuenta = new CuentaBancaria();
 cuenta.saldo = 1000000.0;  // ¡Fraude!
 cuenta.movimientos.clear();  // ¡Borró el historial!
 ```
+---
 
 ### ✅ BIEN: Encapsulamiento apropiado
 ```java
@@ -1019,6 +1023,7 @@ public class Pila extends ArrayList {
 }
 // Problema: Pila expone métodos de ArrayList que no deberían estar disponibles
 ```
+---
 
 ### ✅ MEJOR: Composición
 ```java
@@ -1041,526 +1046,7 @@ public class Pila {
 }
 ```
 
----
-
-# 10. Ejemplo Completo: Sistema de Gimnasio
-
-## 10.1 Enunciado del Problema
-
-> "Un gimnasio necesita un sistema para gestionar sus operaciones. Los clientes se registran proporcionando nombre, teléfono y fecha de nacimiento. Cada cliente puede contratar diferentes tipos de membresías: mensual, trimestral o anual.
->
-> El gimnasio ofrece clases grupales como yoga, spinning y pilates. Cada clase tiene un instructor asignado, un horario específico, capacidad máxima y sala donde se imparte. Los clientes pueden reservar plazas en las clases.
->
-> Los instructores son empleados con nombre, especialidad y horarios de disponibilidad. El sistema debe registrar la asistencia de clientes a las clases."
-
----
-
-# 10.2 Paso 1: Análisis de Sustantivos
-
-**Sustantivos identificados:**
-1. Gimnasio, 2. Sistema, 3. Operaciones, 4. Clientes, 5. Nombre, 6. Teléfono, 7. Fecha de nacimiento, 8. Tipos de membresías, 9. Membresía, 10. Mensual/trimestral/anual, 11. Precio, 12. Fecha de inicio, 13. Fecha de vencimiento, 14. Clases grupales, 15. Yoga/spinning/pilates, 16. Instructor, 17. Horario, 18. Capacidad máxima, 19. Sala, 20. Reserva, 21. Plaza, 22. Empleados, 23. Especialidad, 24. Asistencia, 25. Estadísticas...
-
----
-
-# 10.3 Paso 2: Filtrado de Candidatos
-
-| Decisión | Clase | Justificación |
-|----------|-------|---------------|
-| ❌ Descartar | Sistema, Operaciones | Demasiado genérico |
-| ❌ Descartar | Nombre, Teléfono, Fecha nacimiento | Atributos de Cliente |
-| ❌ Descartar | Precio, Fecha inicio/vencimiento | Atributos de Membresía |
-| ❌ Descartar | Horario, Capacidad máxima | Atributos de Clase |
-| ❌ Descartar | Especialidad | Atributo de Instructor |
-| ❌ Descartar | Empleados | Instructor ES un empleado |
-| ❌ Descartar | Plaza | Es la misma entidad que Reserva |
-| ❌ Descartar | Estadísticas | Es un resultado, no entidad |
-| 🔄 Enum | Mensual/trimestral/anual | Tipos de membresía |
-| 🔄 Enum | Yoga/spinning/pilates | Tipos de clase |
-
----
-
-# 10.4 Paso 3: Clases Finales Identificadas
-
-### 7 clases principales:
-
-1. **Cliente** - Entidad principal del dominio
-2. **Membresía** - Representa contrato de servicio
-3. **Clase** - Actividad grupal programada
-4. **Instructor** - Persona que imparte clases
-5. **Sala** - Espacio físico
-6. **Reserva** - Asociación entre Cliente y Clase
-7. **Asistencia** - Registro de asistencia real
-
----
-
-# 10.5 Paso 4: Diagrama de Clases
-
-```
-┌─────────────┐ 1          0..1 ┌──────────────┐
-│   Cliente   │♦───────────────│  Membresía   │
-│─────────────│  tiene         │──────────────│
-│ - id        │                │ - id         │
-│ - nombre    │                │ - tipo       │
-│ - telefono  │                │ - precio     │
-│ - fechaNac  │                │ - fechaIni   │
-│─────────────│                │ - fechaVenc  │
-│+ getEdad()  │                │──────────────│
-│+ tieneMembr │                │+ estaVigente │
-└─────────────┘                └──────────────┘
-       │1
-       │ realiza
-      *│
-┌──────┴──────┐              ┌──────────────┐
-│   Reserva   │*          1  │    Clase     │
-│─────────────│──────────────│──────────────│
-│ - id        │ para         │ - id         │
-│ - fechaRes  │              │ - nombre     │
-│─────────────│              │ - horario    │
-│+ cancelar() │              │ - capacidad  │
-└─────────────┘              │──────────────│
-       │1                    │+ hayEspacio()│
-       │ tiene               └───────┬──────┘
-       │                             │1
-       │0..1                         │ imparte
-┌──────┴──────┐              ┌───────┴──────┐
-│  Asistencia │              │  Instructor  │
-│─────────────│              │──────────────│
-│ - id        │              │ - id         │
-│ - asistio   │              │ - nombre     │
-│ - fecha     │              │ - especial   │
-│─────────────│              │──────────────│
-│+ marcar()   │              │+ puedImp()   │
-└─────────────┘              └──────────────┘
-
-                          1  *┌──────────┐
-                    ┌─────────│   Sala   │
-                    │se imp en│──────────│
-                    │         │ - id     │
-                    │         │ - nombre │
-                    │         │ - capac  │
-                    │         │──────────│
-                    │         │+ estaDisp│
-                    │         └──────────┘
-```
-
----
-
-# 10.6 Paso 5: Implementación en Java - Enums
-
-```java
-public enum TipoMembresia {
-    MENSUAL(1, 50.0),
-    TRIMESTRAL(3, 130.0),
-    ANUAL(12, 480.0);
-
-    private final int meses;
-    private final double precio;
-
-    TipoMembresia(int meses, double precio) {
-        this.meses = meses;
-        this.precio = precio;
-    }
-
-    public int getMeses() { return meses; }
-    public double getPrecio() { return precio; }
-}
-
-public enum TipoClase {
-    YOGA, SPINNING, PILATES, CROSSFIT
-}
-
-public enum EstadoReserva {
-    CONFIRMADA, CANCELADA, COMPLETADA
-}
-```
-
----
-
-# 10.7 Paso 6: Implementación - Clase Cliente
-
-```java
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Cliente {
-    private int id;
-    private String nombre;
-    private String telefono;
-    private LocalDate fechaNacimiento;
-    private Membresia membresiaActual;
-    private List<Reserva> reservas = new ArrayList<>();
-
-    public Cliente(int id, String nombre, String telefono, LocalDate fechaNacimiento) {
-        this.id = id;
-        this.nombre = nombre;
-        this.telefono = telefono;
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public int obtenerEdad() {
-        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
-    }
-
-    public boolean tieneMembresiaActiva() {
-        return membresiaActual != null && membresiaActual.estaVigente();
-    }
-
-    public Membresia contratarMembresia(TipoMembresia tipo) {
-        membresiaActual = new Membresia(generarId(), tipo, this);
-        return membresiaActual;
-    }
-
-    public Reserva reservarClase(Clase clase) {
-        if (!tieneMembresiaActiva()) {
-            System.out.println("Debe tener membresía activa para reservar");
-            return null;
-        }
-        if (!clase.hayEspacioDisponible()) {
-            System.out.println("Clase llena");
-            return null;
-        }
-        Reserva reserva = new Reserva(generarId(), this, clase);
-        reservas.add(reserva);
-        return reserva;
-    }
-
-    private static int contadorId = 1;
-    private static int generarId() { return contadorId++; }
-
-    // Getters...
-}
-```
-
----
-
-# 10.8 Paso 7: Implementación - Membresía
-
-```java
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
-public class Membresia {
-    private int id;
-    private TipoMembresia tipo;
-    private Cliente cliente;
-    private LocalDate fechaInicio;
-    private LocalDate fechaVencimiento;
-    private double precio;
-
-    public Membresia(int id, TipoMembresia tipo, Cliente cliente) {
-        this.id = id;
-        this.tipo = tipo;
-        this.cliente = cliente;
-        this.fechaInicio = LocalDate.now();
-        this.fechaVencimiento = fechaInicio.plusMonths(tipo.getMeses());
-        this.precio = tipo.getPrecio();
-    }
-
-    public boolean estaVigente() {
-        LocalDate hoy = LocalDate.now();
-        return !hoy.isAfter(fechaVencimiento);
-    }
-
-    public long diasRestantes() {
-        return ChronoUnit.DAYS.between(LocalDate.now(), fechaVencimiento);
-    }
-
-    public Membresia renovar() {
-        return new Membresia(generarId(), tipo, cliente);
-    }
-
-    private static int contadorId = 1;
-    private static int generarId() { return contadorId++; }
-
-    // Getters...
-}
-```
-
----
-
-# 10.9 Paso 8: Implementación - Instructor y Sala
-
-```java
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Instructor {
-    private int id;
-    private String nombre;
-    private String especialidad;
-    private List<Clase> clases = new ArrayList<>();
-
-    public Instructor(int id, String nombre, String especialidad) {
-        this.id = id;
-        this.nombre = nombre;
-        this.especialidad = especialidad;
-    }
-
-    public void agregarClase(Clase clase) {
-        clases.add(clase);
-    }
-
-    public List<Clase> obtenerClases() {
-        return new ArrayList<>(clases);
-    }
-
-    public boolean tieneDisponibilidad(LocalDateTime horario) {
-        return clases.stream().noneMatch(c -> c.getHorario().equals(horario));
-    }
-}
-
-public class Sala {
-    private int id;
-    private String nombre;
-    private int capacidad;
-
-    public Sala(int id, String nombre, int capacidad) {
-        this.id = id;
-        this.nombre = nombre;
-        this.capacidad = capacidad;
-    }
-
-    public boolean estaDisponible(LocalDateTime horario) {
-        // Lógica para verificar disponibilidad
-        return true;
-    }
-
-    // Getters...
-    public int getCapacidad() { return capacidad; }
-}
-```
-
----
-
-# 10.10 Paso 9: Implementación - Clase y Reserva
-
-```java
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Clase {
-    private int id;
-    private TipoClase tipo;
-    private Instructor instructor;
-    private Sala sala;
-    private LocalDateTime horario;
-    private int capacidadMaxima;
-    private List<Reserva> reservas = new ArrayList<>();
-
-    public Clase(int id, TipoClase tipo, Instructor instructor, 
-                 Sala sala, LocalDateTime horario) {
-        this.id = id;
-        this.tipo = tipo;
-        this.instructor = instructor;
-        this.sala = sala;
-        this.horario = horario;
-        this.capacidadMaxima = sala.getCapacidad();
-        instructor.agregarClase(this);
-    }
-
-    public boolean hayEspacioDisponible() {
-        return reservas.size() < capacidadMaxima;
-    }
-
-    public int obtenerNumeroReservas() {
-        return reservas.size();
-    }
-
-    public void agregarReserva(Reserva reserva) {
-        if (hayEspacioDisponible()) {
-            reservas.add(reserva);
-        }
-    }
-
-    public double obtenerPorcentajeOcupacion() {
-        return (reservas.size() * 100.0) / capacidadMaxima;
-    }
-
-    public LocalDateTime getHorario() { return horario; }
-}
-
-public class Reserva {
-    private int id;
-    private Cliente cliente;
-    private Clase clase;
-    private LocalDateTime fechaReserva;
-    private Asistencia asistencia;
-    private EstadoReserva estado;
-
-    public Reserva(int id, Cliente cliente, Clase clase) {
-        this.id = id;
-        this.cliente = cliente;
-        this.clase = clase;
-        this.fechaReserva = LocalDateTime.now();
-        this.estado = EstadoReserva.CONFIRMADA;
-        clase.agregarReserva(this);
-    }
-
-    public void cancelar() {
-        estado = EstadoReserva.CANCELADA;
-    }
-
-    public void marcarAsistencia() {
-        asistencia = new Asistencia(generarId(), this, true);
-    }
-
-    private static int contadorId = 1;
-    private static int generarId() { return contadorId++; }
-}
-```
-
----
-
-# 10.11 Paso 10: Implementación - Asistencia
-
-```java
-import java.time.LocalDateTime;
-
-public class Asistencia {
-    private int id;
-    private Reserva reserva;
-    private LocalDateTime fechaAsistencia;
-    private boolean asistio;
-
-    public Asistencia(int id, Reserva reserva, boolean asistio) {
-        this.id = id;
-        this.reserva = reserva;
-        this.fechaAsistencia = LocalDateTime.now();
-        this.asistio = asistio;
-    }
-
-    // Getters...
-}
-```
-
----
-
-# 10.12 Paso 11: Validación con Casos de Uso
-
-## Caso de Uso 1: Cliente reserva una clase
-
-```java
-// Crear entidades
-Cliente cliente = new Cliente(1, "Ana García", "123456789", 
-                                LocalDate.of(1990, 5, 15));
-Instructor instructor = new Instructor(1, "Carlos López", "Yoga");
-Sala sala = new Sala(1, "Sala A", 20);
-Clase clase = new Clase(1, TipoClase.YOGA, instructor, sala, 
-                        LocalDateTime.now().plusDays(1));
-
-// Cliente contrata membresía
-Membresia membresia = cliente.contratarMembresia(TipoMembresia.MENSUAL);
-System.out.println("Membresía vigente: " + membresia.estaVigente());
-
-// Cliente reserva clase
-Reserva reserva = cliente.reservarClase(clase);
-System.out.println("Reserva exitosa: " + (reserva != null));
-System.out.println("Espacios ocupados: " + clase.obtenerNumeroReservas() + "/" + clase.getCapacidadMaxima());
-```
-
-**Resultado:** ✅ El modelo permite este flujo completo
-
----
-
-# 10.13 Decisiones de Diseño Clave
-
-| Decisión | Justificación |
-|----------|---------------|
-| **Reserva como clase separada** | Permite almacenar fecha de reserva, estado |
-| **Asistencia como clase separada** | Diferencia entre reservar y asistir |
-| **Membresía vinculada a Cliente** | Facilita verificar estado de membresía |
-| **Enum para tipos** | Evita duplicación y errores de escritura |
-| **No incluir Gimnasio como clase** | No agrega valor en este alcance |
-
-### Alternativas consideradas:
-- ¿TipoClase como clase vs Enum? → Enum es suficiente
-- ¿Sala como atributo de Clase? → Es entidad con capacidad propia
-
----
-
-# 11. Validación del Modelo
-
-## 11.1 Técnicas de Validación
-
-### 1. Recorrido de Casos de Uso (CRC Cards)
-
-Para cada caso de uso, identificar:
-- Qué clase es responsable de cada paso
-- Que cada responsabilidad esté asignada
-- Que las colaboraciones existan
-
-**Ejemplo:**
-```
-Caso: "Cliente reserva una clase"
-1. Cliente inicia reserva → Responsable: Cliente ✅
-2. Verificar membresía activa → Responsable: Cliente ✅
-3. Verificar espacio disponible → Responsable: Clase ✅
-4. Crear reserva → Responsable: Reserva ✅
-```
-
----
-
-# 11.2 Checklist de Validación
-
-### Estructura:
-- [ ] Cada clase tiene nombre descriptivo
-- [ ] Cada clase tiene responsabilidades claras
-- [ ] No hay clases redundantes
-- [ ] No hay clases "Dios"
-
-### Relaciones:
-- [ ] Todas las relaciones tienen multiplicidad definida
-- [ ] Las relaciones tienen el tipo correcto
-- [ ] No hay dependencias circulares
-- [ ] Las navegabilidades están bien definidas
-
-### Principios de Diseño:
-- [ ] Alta cohesión en cada clase
-- [ ] Bajo acoplamiento entre clases
-- [ ] Responsabilidad única respetada
-- [ ] Buen encapsulamiento
-
-### Completitud:
-- [ ] Todos los casos de uso están cubiertos
-- [ ] Todos los requisitos funcionales representados
-- [ ] No hay funcionalidad "huérfana"
-
----
-
-# 12. Checklist Final antes de Implementar
-
-## Identificación de Clases
-- [ ] He analizado todos los sustantivos del enunciado
-- [ ] He descartado candidatos inapropiados
-- [ ] Cada clase tiene responsabilidad clara y única
-- [ ] No hay clases redundantes o duplicadas
-- [ ] Los nombres son descriptivos y del dominio
-
-## Relaciones
-- [ ] He identificado todas las relaciones necesarias
-- [ ] La multiplicidad está correctamente especificada
-- [ ] He elegido el tipo de relación apropiado
-- [ ] No hay relaciones innecesarias
-
-## Atributos y Métodos
-- [ ] Cada clase tiene atributos necesarios
-- [ ] Los métodos reflejan las responsabilidades
-- [ ] La visibilidad está correctamente definida
-- [ ] Los tipos de datos son apropiados
-
-## Principios de Diseño
-- [ ] Alta cohesión
-- [ ] Bajo acoplamiento
-- [ ] Responsabilidad única
-- [ ] Buen encapsulamiento
-
----
-
-# 13. Conclusiones
+# 10 Conclusiones
 
 ## Puntos Clave para Recordar
 
@@ -1584,7 +1070,7 @@ Caso: "Cliente reserva una clase"
 
 ---
 
-# 13.1 El Viaje Continuo
+# 10.1 El Viaje Continuo
 
 No esperes dominar la identificación de clases inmediatamente. Es una habilidad que se desarrolla con:
 
@@ -1595,7 +1081,7 @@ No esperes dominar la identificación de clases inmediatamente. Es una habilidad
 
 ---
 
-# 13.2 Próximos Pasos
+# 10.2 Próximos Pasos
 
 Una vez que domines la identificación de clases, profundiza en:
 
@@ -1622,61 +1108,7 @@ Una vez que domines la identificación de clases, profundiza en:
 
 ---
 
-# 14. Ejercicios Prácticos
-
-## Ejercicio 1: Sistema de Reserva de Vuelos (Básico)
-
-> "Los clientes pueden buscar vuelos por origen, destino y fecha. Cada vuelo tiene número, origen, destino, hora de salida y llegada. Los clientes pueden reservar asientos en clase turista o ejecutiva. Cada reserva debe confirmarse mediante pago con tarjeta de crédito."
-
-**Tareas:**
-1. Identifica candidatos a clases (sustantivos)
-2. Aplica filtros de descarte
-3. Define 4-6 clases principales
-4. Identifica relaciones y multiplicidad
-5. Crea diagrama UML
-
-**Pistas:**
-- ¿Es "Cliente" diferente de "Pasajero"?
-- ¿"Asiento" debería ser una clase?
-- ¿Cómo manejas "clase turista" vs "clase ejecutiva"?
-
----
-
-# 14.1 Ejercicio 2: Sistema de Clínica Veterinaria (Intermedio)
-
-> "La clínica atiende mascotas cuyos dueños están registrados en el sistema. Cada mascota tiene un historial médico con visitas, tratamientos y vacunas. Los veterinarios pueden prescribir medicamentos y agendar citas de seguimiento."
-
-**Tareas:**
-1. Identifica clases (incluyendo clases no mencionadas explícitamente)
-2. Define relaciones complejas
-3. Identifica relaciones muchos-a-muchos
-4. Crea diagrama completo
-
-**Desafíos:**
-- ¿Cómo representas el historial médico?
-- ¿Una visita es una clase o solo un atributo?
-- ¿Cómo relacionas tratamiento con medicamento?
-
----
-
-# 14.2 Ejercicio 3: Red Social Simple (Avanzado)
-
-> "Los usuarios pueden crear perfiles, publicar mensajes, seguir a otros usuarios y dar 'me gusta' a publicaciones. Las publicaciones pueden contener texto, imágenes o ambos. Los usuarios reciben notificaciones de nuevas actividades."
-
-**Tareas:**
-1. Identifica todas las clases (mínimo 8)
-2. Modela relaciones muchos-a-muchos
-3. Identifica patrones (Observer para notificaciones)
-4. Crea diagrama UML completo
-
-**Desafíos:**
-- ¿Cómo manejas "seguir" (relación Usuario-Usuario)?
-- ¿"Me gusta" es una clase o solo un contador?
-- ¿Cómo se generan las notificaciones?
-
----
-
-# 15. Recursos y Referencias
+# 11. Recursos y Referencias
 
 ## Libros Fundamentales
 
@@ -1694,7 +1126,7 @@ Una vez que domines la identificación de clases, profundiza en:
 
 ---
 
-# 15.1 Herramientas Recomendadas
+# 11.1 Herramientas Recomendadas
 
 ## Para aprender:
 - **Draw.io** - Gratuito, simple, sin instalación
@@ -1711,7 +1143,7 @@ Una vez que domines la identificación de clases, profundiza en:
 
 ---
 
-# 16. Reflexión Final
+# 12. Reflexión Final
 
 ## El Arte del Buen Diseño
 
@@ -1724,7 +1156,7 @@ La identificación de clases es el primer paso para crear código comprensible. 
 
 ---
 
-# 16.1 Última Recomendación
+# 12.1 Última Recomendación
 
 ## Comienza tu próximo proyecto dibujando el diagrama de clases ANTES de escribir código.
 
@@ -1734,9 +1166,6 @@ Verás la diferencia.
 
 # ¡Gracias!
 
-## ¡Adelante, y feliz modelado! 🚀
-
-**Documento original:** EDES-U3.3-IdentifClases  
-**Adaptación:** Presentación Marp con ejemplos en Java
+## ¿Preguntas?
 
 ---
