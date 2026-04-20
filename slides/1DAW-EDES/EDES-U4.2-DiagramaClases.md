@@ -1701,7 +1701,10 @@ public enum TipoMembresia {
     public int getMeses() { return meses; }
     public double getPrecio() { return precio; }
 }
+´´´
+---
 
+```java
 public enum TipoClase {
     YOGA, SPINNING, PILATES, CROSSFIT
 }
