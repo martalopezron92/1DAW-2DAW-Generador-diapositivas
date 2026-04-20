@@ -1303,6 +1303,25 @@ public class Avion implements IVolador {
 
 ---
 
+# Relaciones UML y su diseño en código
+
+| Relación UML                     | Responsabilidad (quién hace qué)                                 | Dependencia (quién necesita a quién)   | Ciclo de vida (quién crea/controla)                     | Ejemplo Java (claro)                                                                                                                                    |
+| -------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Asociación** `A ─── B`         | A usa a B para cumplir una tarea puntual                         | Débil (B no depende de A)              | Independiente (cada uno vive por su cuenta)             | `java class Pedido { private Cliente cliente; public Pedido(Cliente c){ this.cliente = c; } }`                                                          |
+| **Agregación** `A ◇── B`         | A agrupa varios B (los gestiona, pero no los “posee” totalmente) | Media (A depende de B, pero B no de A) | B puede existir sin A y cambiar de “dueño”              | `java class Equipo { private List<Jugador> jugadores; public Equipo(List<Jugador> j){ this.jugadores = j; } }`                                          |
+---
+
+| Relación UML                     | Responsabilidad (quién hace qué)                                 | Dependencia (quién necesita a quién)   | Ciclo de vida (quién crea/controla)                     | Ejemplo Java (claro)                                                                                                                                    |
+| -------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Composición** `A ◆── B`        | A es responsable de crear y gestionar B                          | Fuerte (B depende de A)                | A controla el ciclo de vida de B (nace y “muere” con A) | `java class Carrito { private List<ItemCarrito> items = new ArrayList<>(); public void agregar(Producto p,int c){ items.add(new ItemCarrito(p,c)); } }` |
+| **Herencia** `A ▷ B`             | B hereda responsabilidades de A y puede ampliarlas               | Media (B depende de A)                 | B no puede existir sin A (conceptualmente)              | `java class Empleado extends Persona { private double sueldo; }`                                                                                        |
+---
+| Relación UML                     | Responsabilidad (quién hace qué)                                 | Dependencia (quién necesita a quién)   | Ciclo de vida (quién crea/controla)                     | Ejemplo Java (claro)                                                                                                                                    |
+| -------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Interfaz** `A ▷ Interface`     | A implementa un comportamiento definido externamente             | Baja (solo depende del contrato)       | Independiente (se pueden cambiar implementaciones)      | `java interface Pagable { void pagar(); } class Tarjeta implements Pagable { public void pagar(){} }`                                                   |
+| **Clase intermedia** `A ─ C ─ B` | C gestiona la relación entre A y B (tiene lógica propia)         | Media (C depende de A y B)             | C suele crearse cuando ocurre la interacción            | `java class Reserva { private Cliente cliente; private Clase clase; private String estado; }`                                                           |
+
+---
 <!-- _class: lead -->
 
 # 4. Mejores Prácticas
@@ -1327,15 +1346,12 @@ public class Usuario {
     public void login() { }
     public void logout() { }
     public void cambiarPassword() { }
-
     // Gestión de permisos
     public boolean tienePermiso(String recurso) { return false; }
     public void agregarPermiso(String recurso) { }
-
     // Notificaciones
     public void enviarEmail(String mensaje) { }
     public void enviarSMS(String mensaje) { }
-
     // Persistencia
     public void guardarEnBaseDatos() { }
     public void cargarDesdeBaseDatos() { }
