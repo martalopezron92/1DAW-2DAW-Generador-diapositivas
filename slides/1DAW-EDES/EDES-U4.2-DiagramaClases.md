@@ -55,8 +55,8 @@ style: |
     font-family: 'Consolas', monospace;
   }
   pre {
-    background: #2c3e50;
-    color: #ecf0f1;
+    background: #ecf0f1;
+    color: #2c3e50;
     padding: 15px;
     border-radius: 5px;
     font-size: 0.75em;
