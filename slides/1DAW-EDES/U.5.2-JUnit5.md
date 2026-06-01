@@ -1,0 +1,645 @@
+---
+marp: true
+theme: default
+paginate: true
+backgroundColor: '#0f1117'
+color: '#e8e6df'
+style: |
+  section {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    padding: 48px 64px;
+    background-color: #0f1117;
+    color: #e8e6df;
+  }
+  h1 { color: #79b8ff; font-size: 2em; border-bottom: 2px solid #79b8ff; padding-bottom: 12px; margin-bottom: 24px; }
+  h2 { color: #79b8ff; font-size: 1.4em; margin-bottom: 16px; }
+  h3 { color: #a8c9ff; font-size: 1.1em; margin-bottom: 10px; }
+  code { background: #1e2330; color: #f0c040; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; }
+  pre { background: #1e2330; border-left: 4px solid #79b8ff; padding: 20px; border-radius: 4px; font-size: 0.8em; overflow: auto; }
+  pre code { background: transparent; padding: 0; color: #e8e6df; }
+  ul { margin-left: 1.2em; }
+  li { margin-bottom: 10px; line-height: 1.6; }
+  .tag { background: #79b8ff; color: #0f1117; padding: 4px 14px; border-radius: 20px; font-size: 0.75em; font-weight: bold; display: inline-block; margin-bottom: 18px; }
+  .highlight { background: #1e2330; border-left: 4px solid #f0c040; padding: 14px 20px; border-radius: 0 6px 6px 0; margin: 16px 0; font-size: 0.9em; }
+  .muted { color: #888; font-size: 0.85em; }
+  section.portada { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+  section.portada h1 { font-size: 2.6em; border: none; margin-bottom: 8px; }
+  section.portada p { color: #888; font-size: 0.9em; margin: 4px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+  th { background: #1e2330; color: #79b8ff; padding: 10px 14px; text-align: left; border: 1px solid #2a2f40; }
+  td { padding: 10px 14px; border: 1px solid #2a2f40; }
+  tr:nth-child(even) { background: #161a24; }
+---
+
+<!--
+NOTA GENERAL — SESIÓN 2
+========================
+Esta sesión es práctica. Los alumnos deben tener IntelliJ con un proyecto
+Java abierto. El primer bloque (configuración) puede llevar más tiempo del
+previsto si hay alumnos con problemas de instalación; es normal, no te agobies.
+
+La parte más importante es que cada alumno ejecute su primer test en verde.
+Ese momento de "funciona" es el que engancha a los estudiantes.
+
+Tiempos orientativos:
+- Portada + Maven/Gradle: 10 min (puede alargarse)
+- Estructura de carpetas: 5 min
+- Clase Calculadora: 5 min
+- Primer test: 5 min
+- Anotaciones: 5 min
+- @BeforeEach: 5 min
+- Aserciones: 5 min
+- Clases de equivalencia en práctica: 5 min
+- Los 3 tests de dividir: 3 min
+- Ejecutar en IntelliJ: 5 min
+- Práctica guiada: 20 min (tiempo del alumno)
+TOTAL: ~68 min — recorta la teoría si es necesario para dar tiempo a la práctica
+-->
+
+<!-- _class: portada -->
+
+# JUnit 5 en Java
+
+<div class="tag">SESIÓN 2 DE 4</div>
+
+**EDES · 1ºDAW**
+Primer test real · Configuración · Aserciones
+*~55 minutos*
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+CONCEPTO PREVIO IMPORTANTE: ¿Qué es Maven y qué es Gradle?
+
+Son "gestores de dependencias y construcción" (build tools).
+Su función es: cuando tu proyecto necesita una librería externa
+(como JUnit), en lugar de descargar el .jar manualmente y copiarlo
+a mano, simplemente escribes el nombre de la librería en un fichero
+de configuración y Maven/Gradle la descarga automáticamente de internet.
+
+Maven usa el fichero pom.xml (Project Object Model, formato XML).
+Gradle usa el fichero build.gradle (formato Groovy) o build.gradle.kts (Kotlin).
+
+¿Cuál usar? Para este curso, cualquiera. Si IntelliJ preguntó
+"Maven o Gradle" al crear el proyecto, usa el que eligieron.
+Si no saben cuál tienen, en la raíz del proyecto habrá un pom.xml
+(Maven) o un build.gradle (Gradle).
+
+La diapositiva muestra los dos. Solo hay que copiar el bloque
+que corresponde al gestor de cada uno.
+
+Importante: después de añadir la dependencia, IntelliJ mostrará
+un icono de recargar (🔄). Hay que hacer clic para que descargue JUnit.
+-->
+
+# Configurar JUnit 5 — Maven
+
+Añade esto a tu `pom.xml`:
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.10.2</version>
+    <scope>test</scope>
+  </dependency>
+</dependencies>
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <version>3.2.5</version>
+    </plugin>
+  </plugins>
+</build>
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Esta diapositiva es para alumnos que crearon el proyecto con Gradle.
+Si todos tienen Maven, puedes saltarla.
+
+La diferencia entre build.gradle (Groovy) y build.gradle.kts (Kotlin DSL)
+es solo la sintaxis del fichero de configuración, no afecta al código Java.
+IntelliJ indica cuál es en la pestaña del fichero.
+
+La línea useJUnitPlatform() es OBLIGATORIA en Gradle para que reconozca
+los tests de JUnit 5. Sin ella, Gradle no ejecuta los tests aunque estén
+bien escritos. Es un error muy frecuente y frustrante si no se sabe esto.
+-->
+
+# Configurar JUnit 5 — Gradle
+
+Si tu proyecto usa Gradle, añade esto a `build.gradle`:
+
+```groovy
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+test {
+    useJUnitPlatform()  // ← OBLIGATORIO para JUnit 5
+}
+```
+
+O si tienes `build.gradle.kts` (Kotlin DSL):
+
+```kotlin
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+}
+
+tasks.test {
+    useJUnitPlatform()  // ← OBLIGATORIO para JUnit 5
+}
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Esta diapositiva explica algo que los informáticos dan por sentado
+pero que puede no ser obvio: ¿por qué hay dos carpetas "java"?
+
+La respuesta es que Maven/Gradle tienen una convención:
+- src/main/java  → aquí va el código que se entrega al cliente (producción)
+- src/test/java  → aquí van los tests, que SOLO existen en desarrollo
+
+Cuando se genera el .jar o .war final para desplegar, los tests
+NO se incluyen. Solo se incluye el código de src/main.
+
+Esto tiene sentido: los tests son herramientas de desarrollo,
+no parte del producto final. El cliente no necesita JUnit.
+
+La estructura de paquetes debe ser IDÉNTICA en ambas carpetas.
+Si la clase está en com/ejemplo/Calculadora.java,
+el test debe estar en com/ejemplo/CalculadoraTest.java.
+IntelliJ ayuda con esto: si haces clic derecho sobre la clase
+y eliges "Generate Test", crea el fichero en el lugar correcto.
+-->
+
+# Estructura de carpetas — ¿por qué dos "java"?
+
+```
+src/
+├── main/
+│   └── java/
+│       └── com/ejemplo/
+│           └── Calculadora.java     ← código de producción
+└── test/
+    └── java/
+        └── com/ejemplo/
+            └── CalculadoraTest.java ← tests (no se entregan al cliente)
+```
+
+<div class="highlight">
+💡 Los tests viven en <code>src/test</code> porque NO se incluyen en el programa final.
+Son solo herramientas de desarrollo.
+</div>
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Esta es la clase que los alumnos van a testear. Antes de escribir el test,
+crean esta clase en src/main/java/com/ejemplo/.
+
+Puntos a destacar en el código:
+- El método dividir lanza una excepción si b es 0. Una excepción es
+  una señal de error que interrumpe la ejecución normal. Más adelante
+  veremos cómo testear que se lanza correctamente.
+- "throw new ArithmeticException(...)" es la forma de Java de decir
+  "aquí hay un error, no puedo continuar". El mensaje entre comillas
+  es la descripción del error.
+
+Si algún alumno pregunta qué es una excepción: es como un aviso de
+"algo fue mal". Java la lanza y el código que llamó al método puede
+atraparla y decidir qué hacer (o dejar que el programa falle con un mensaje).
+-->
+
+# Clase bajo prueba — `Calculadora.java`
+
+```java
+package com.ejemplo;
+
+public class Calculadora {
+
+    public int sumar(int a, int b) {
+        return a + b;
+    }
+
+    public int restar(int a, int b) {
+        return a - b;
+    }
+
+    public int dividir(int a, int b) {
+        if (b == 0) {
+            // Lanzamos un aviso de error: no se puede dividir entre 0
+            throw new ArithmeticException("No se puede dividir entre cero");
+        }
+        return a / b;
+    }
+}
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Este es el primer test real. Vale la pena escribirlo en vivo en el proyector
+para que los alumnos vean el proceso.
+
+Explicación de cada parte nueva:
+- "import static org.junit.jupiter.api.Assertions.*" importa todas las
+  funciones de aserción (assertEquals, assertTrue, etc.) sin tener que
+  escribir el nombre completo cada vez. El asterisco (*) significa "todo".
+
+- @Test es una anotación: una etiqueta que añadimos ENCIMA de un método
+  para darle instrucciones especiales al compilador o al framework.
+  Le dice a JUnit: "este método es un test, ejecútalo cuando yo pida."
+  No es mágica; JUnit busca todos los métodos con @Test y los ejecuta.
+
+- La clase de test se llama CalculadoraTest por convención.
+  Podría llamarse de cualquier manera, pero NombreClaseTest es lo estándar.
+
+- El método no tiene "return": los tests no devuelven nada.
+  Su resultado es: pasa (verde) o falla (rojo).
+-->
+
+# Primer test — `CalculadoraTest.java`
+
+```java
+package com.ejemplo;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CalculadoraTest {
+
+    @Test
+    void sumar_dosPositivos_devuelveResultadoCorrecto() {
+        // Arrange
+        Calculadora calc = new Calculadora();
+
+        // Act
+        int resultado = calc.sumar(3, 5);
+
+        // Assert
+        assertEquals(8, resultado);
+    }
+}
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Las anotaciones son una característica de Java para añadir metadatos
+(información adicional) a clases, métodos o variables.
+Siempre empiezan por @. JUnit las usa para saber qué hacer con cada método.
+
+Explicación de la tabla:
+- @Test: el método ES un test. JUnit lo ejecuta.
+- @BeforeEach: se ejecuta ANTES de cada @Test. Se usa para preparar
+  objetos que se necesitan en todos los tests (en la siguiente diapositiva).
+- @AfterEach: se ejecuta DESPUÉS de cada @Test. Se usa para limpiar
+  (cerrar conexiones, borrar ficheros temporales, etc.).
+- @BeforeAll/@AfterAll: se ejecutan UNA SOLA VEZ para toda la clase.
+  Deben ser static porque se ejecutan antes de que se cree el objeto
+  de test. Para 1ºDAW apenas se usan; mencionarlo de pasada.
+- @Disabled: como poner un test "en pausa". No falla ni pasa, se ignora.
+  Útil cuando sabes que un test está roto pero no quieres borrarlo todavía.
+-->
+
+# Anotaciones esenciales de JUnit 5
+
+| Anotación | Cuándo se ejecuta |
+|---|---|
+| `@Test` | Marca un método como test |
+| `@BeforeEach` | Antes de **cada** test de la clase |
+| `@AfterEach` | Después de **cada** test |
+| `@BeforeAll` | Una sola vez antes de todos (debe ser `static`) |
+| `@AfterAll` | Una sola vez después de todos (debe ser `static`) |
+| `@Disabled` | Desactiva un test temporalmente |
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Esta diapositiva explica por qué usar @BeforeEach en lugar de
+declarar el objeto dentro de cada test.
+
+La pregunta clave es: ¿por qué creamos un objeto Calculadora NUEVO
+en cada test en lugar de reutilizar el mismo?
+
+Respuesta: el aislamiento. Cada test debe ser independiente del resto.
+Si un test modifica el estado de un objeto y el siguiente test usa
+el mismo objeto, el segundo test puede fallar por culpa del primero,
+no por un bug real. Eso hace muy difícil encontrar el problema.
+
+Al crear un objeto nuevo en @BeforeEach, cada test empieza con un estado
+limpio y predecible. Esto se llama "fixture" (arreglo de prueba).
+
+Para Calculadora no hay estado que cambiar (no guarda nada),
+así que el beneficio aquí es más organizativo que funcional.
+Pero es buena práctica que los alumnos adquieran desde el principio.
+-->
+
+# `@BeforeEach` — compartir objetos entre tests
+
+```java
+class CalculadoraTest {
+
+    Calculadora calc; // declaramos aquí, inicializamos en setUp
+
+    @BeforeEach
+    void setUp() {
+        // Se ejecuta ANTES de cada @Test
+        // Objeto nuevo en cada test → cada test empieza limpio
+        calc = new Calculadora();
+    }
+
+    @Test
+    void sumar_dosPositivos_devuelveResultadoCorrecto() {
+        assertEquals(8, calc.sumar(3, 5));
+    }
+
+    @Test
+    void restar_dosNumeros_devuelveResultadoCorrecto() {
+        assertEquals(2, calc.restar(5, 3));
+    }
+}
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Explicación de las aserciones que pueden ser menos obvias:
+
+- assertEquals(esperado, real): el orden importa para el mensaje de error.
+  Si pones assertEquals(resultado, 8) en lugar de assertEquals(8, resultado),
+  el mensaje de error dirá "Expected: <resultado> but was: 8" que es confuso.
+  Convenio: siempre el valor esperado primero.
+
+- assertThrows: esta es la más especial. El segundo argumento es una
+  "lambda" (función anónima): () -> calc.dividir(10, 0).
+  Significa "ejecuta esta acción y comprueba que lanza esa excepción".
+  Si la acción NO lanza la excepción, el test falla.
+  Si lanza la excepción CORRECTA, el test pasa.
+  Podemos guardar la excepción en una variable para verificar el mensaje.
+
+Para los alumnos: por ahora basta con copiar la sintaxis de assertThrows.
+Las lambdas se explican en Programación; aquí solo usamos el patrón.
+-->
+
+# Aserciones más usadas
+
+```java
+// Igualdad — siempre: assertEquals(ESPERADO, REAL)
+assertEquals(8, resultado);
+assertEquals(8, resultado, "Mensaje si falla");
+
+// Booleanos
+assertTrue(resultado > 0);
+assertFalse(lista.isEmpty());
+
+// Nulos
+assertNotNull(objeto);
+assertNull(objeto);
+
+// Excepciones — verifica que el método LANZA el error esperado
+ArithmeticException ex = assertThrows(
+    ArithmeticException.class,
+    () -> calc.dividir(10, 0)   // ← "ejecuta esto y espera que falle"
+);
+assertEquals("No se puede dividir entre cero", ex.getMessage());
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Aquí conectamos con las clases de equivalencia de la sesión 1.
+
+El análisis es:
+¿Qué puede pasar cuando llamo a dividir(a, b)?
+- b es un número normal (distinto de 0) → devuelve el resultado
+- a es cero → devuelve cero (caso límite, pero válido)
+- b es cero → lanza excepción
+
+Con estas 3 clases cubrimos todos los comportamientos distintos del método.
+
+Pregunta para los alumnos: "¿Necesitamos probar dividir(7, 2) Y dividir(100, 5)?
+¿Producen comportamientos distintos?" No, son de la misma clase de equivalencia
+(divisor normal), así que con uno basta.
+
+Nótese que dividir(10, 2) = 5 es un entero exacto. Si algún alumno pregunta
+qué pasa con divisiones no exactas como dividir(10, 3): el método devuelve
+int, así que devuelve 3 (trunca). Eso también sería un caso de prueba válido,
+pero para este ejercicio nos quedamos con los 3 casos principales.
+-->
+
+# Clases de equivalencia — en práctica
+
+**Método `dividir(int a, int b)`** — ¿qué tenemos que probar?
+
+| Clase | Descripción | Ejemplo |
+|---|---|---|
+| Normal | Divisor distinto de cero | `dividir(10, 2)` → `5` |
+| Límite | Dividendo cero | `dividir(0, 5)` → `0` |
+| Inválida | Divisor = 0 | lanza `ArithmeticException` |
+
+<div class="highlight">
+Con <strong>3 tests</strong> cubrimos todos los comportamientos distintos del método.
+</div>
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Esta diapositiva muestra los 3 tests escritos. Puedes escribirlos
+en vivo en el proyector para que los alumnos vean el proceso completo.
+
+Nota sobre el test de la excepción:
+() -> calc.dividir(10, 0) es una lambda. La sintaxis completa sería:
+new Runnable() { public void run() { calc.dividir(10, 0); } }
+Pero Java 8+ permite abreviarlo como () -> calc.dividir(10, 0).
+No hace falta que los alumnos entiendan las lambdas ahora;
+pueden copiar este patrón y usarlo.
+
+Si algún alumno pregunta "¿por qué no ponemos simplemente calc.dividir(10,0)
+dentro del assertThrows?": porque si pusiéramos la llamada directa,
+la excepción se lanzaría ANTES de que assertThrows pudiera atraparla,
+y el test fallaría con un error en lugar de pasar. La lambda envuelve
+la llamada para que assertThrows la controle.
+-->
+
+# Los 3 tests de `dividir`
+
+```java
+@Test
+void dividir_divisorNormal_devuelveResultadoCorrecto() {
+    assertEquals(5, calc.dividir(10, 2));
+}
+
+@Test
+void dividir_dividendoCero_devuelveCero() {
+    assertEquals(0, calc.dividir(0, 5));
+}
+
+@Test
+void dividir_divisorCero_lanzaExcepcion() {
+    assertThrows(
+        ArithmeticException.class,
+        () -> calc.dividir(10, 0)
+    );
+}
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Instrucciones paso a paso para ejecutar tests en IntelliJ.
+Es importante que todos los alumnos lo hagan ellos mismos.
+
+Formas de ejecutar:
+1. Clic derecho sobre la CLASE de test → Run 'CalculadoraTest'
+   (ejecuta todos los tests de esa clase)
+2. Clic derecho sobre un MÉTODO @Test individual → Run 'nombreDelTest'
+   (ejecuta solo ese test)
+3. Clic en el triángulo verde ▶ que aparece en el margen izquierdo
+   junto a la clase o al método
+4. Desde el menú: Run → Run... → seleccionar la clase
+
+Panel de resultados (abajo en IntelliJ):
+- ✅ verde = test pasa
+- ❌ rojo = test falla
+Cuando falla, hay que expandir el test fallido para ver:
+"Expected: 8 but was: 13" (o el mensaje de error de la excepción)
+
+Si un test falla por error de compilación (el código no compila),
+el panel mostrará el error de compilación, no el de aserción.
+-->
+
+# Ejecutar tests en IntelliJ
+
+1. **Clic derecho** sobre la clase → `Run 'CalculadoraTest'`
+2. O clic en el triángulo ▶ del margen izquierdo junto a la clase
+3. Atajo: `Ctrl+Shift+F10` (Windows/Linux) · `Ctrl+Shift+R` (Mac)
+
+**Leer el panel de resultados:**
+
+```
+✅ sumar_dosPositivos_devuelveResultadoCorrecto    12ms
+✅ restar_dosNumeros_devuelveResultadoCorrecto      8ms
+❌ dividir_divisorCero_lanzaExcepcion
+   Expected: ArithmeticException
+   But was:  no exception thrown  ← el método no lanzó nada
+```
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Esta es la parte práctica central de la sesión. Los alumnos trabajan
+solos o en parejas durante unos 20 minutos.
+
+Mientras trabajan, circula por la clase. Los problemas más frecuentes:
+1. "No encuentra la clase JUnit" → no han recargado el proyecto después
+   de añadir la dependencia. Hay que hacer clic en el icono de recargar
+   de Maven/Gradle (aparece en la esquina superior derecha del editor).
+2. "El test no aparece como ejecutable" → el fichero está en src/main
+   en lugar de src/test. Hay que moverlo.
+3. "assertEquals no se reconoce" → falta el import static.
+   Pueden añadirlo manualmente o IntelliJ lo sugiere con Alt+Enter.
+4. "El test siempre pasa aunque el resultado es incorrecto" → han puesto
+   el valor real como primer argumento de assertEquals en lugar del esperado.
+   Sigue pasando porque compara el mismo valor consigo mismo.
+-->
+
+# 🧪 Práctica guiada (20 min)
+
+<div class="tag">EJERCICIO</div>
+
+Crea la clase `Calculadora` y escribe tests para:
+
+1. `sumar(3, 5)` → `8`
+2. `sumar(-1, 1)` → `0`
+3. `restar(10, 4)` → `6`
+4. `dividir(10, 2)` → `5`
+5. `dividir(10, 0)` → lanza `ArithmeticException`
+
+**Recuerda:** Arrange · Act · Assert en cada test.
+**Convención de nombres:** `método_condición_resultadoEsperado`
+
+<div class="muted">Puedes consultar los apuntes. Trabaja en parejas si quieres.</div>
+
+---
+
+# Resumen de la sesión
+
+<div class="tag">CONCEPTOS CLAVE</div>
+
+- Dependencia JUnit 5 en `pom.xml` o `build.gradle` + recargar el proyecto
+- Clases de test en `src/test/java/` (no en `src/main/`)
+- `@Test` marca un método como test · `@BeforeEach` prepara el estado inicial
+- `assertEquals(esperado, real)` · `assertTrue` · `assertThrows`
+- **Clases de equivalencia**: normal · límite · inválida
+
+---
+
+<!--
+NOTA DE PRESENTADOR
+-------------------
+Para la sesión 3 los alumnos necesitan añadir Mockito al proyecto.
+Si tienen tiempo al final de esta sesión, pueden hacerlo ya.
+
+La dependencia de Mockito para Maven es:
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-junit-jupiter</artifactId>
+    <version>5.11.0</version>
+    <scope>test</scope>
+</dependency>
+
+No hace falta que entiendan qué es Mockito todavía. Solo que lo añadan
+al pom.xml/build.gradle y recarguen el proyecto.
+
+El concepto de "inyección de dependencias" que aparece en la sesión 3
+(pasar la dependencia por el constructor) puede ser nuevo para ellos.
+Si ves que la sesión 2 se alarga, deja el concepto de mocks para
+el principio de la sesión 3 en lugar de mencionarlo aquí.
+-->
+
+# Próxima sesión
+
+<div class="tag">SESIÓN 3</div>
+
+## Mocks con Mockito y TDD aplicado
+
+- ¿Para qué sirve un mock? Aislar dependencias
+- Mockito: `mock()`, `when().thenReturn()`, `verify()`
+- Práctica TDD: escribir el test primero
+- Ejercicio: sistema de fiado de una ferretería
+
+<div class="muted">⚠️ Añade la dependencia de Mockito al proyecto antes de la próxima sesión.</div>
