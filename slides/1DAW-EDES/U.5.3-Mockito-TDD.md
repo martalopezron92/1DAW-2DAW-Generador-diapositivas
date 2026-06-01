@@ -14,9 +14,9 @@ style: |
   h1 { color: #f97583; font-size: 2em; border-bottom: 2px solid #f97583; padding-bottom: 12px; margin-bottom: 24px; }
   h2 { color: #f97583; font-size: 1.4em; margin-bottom: 16px; }
   h3 { color: #ffb3ba; font-size: 1.1em; margin-bottom: 10px; }
-  code { background: #1e2330; color: #f0c040; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; }
-  pre { background: #1e2330; border-left: 4px solid #f97583; padding: 20px; border-radius: 4px; font-size: 0.79em; overflow: auto; }
-  pre code { background: transparent; padding: 0; color: #e8e6df; }
+  code { background: #1a2233; color: #ffd166; padding: 3px 9px; border-radius: 5px; font-size: 0.95em; }
+  pre { background: #111827; border-left: 5px solid #f97583; padding: 14px 16px; border-radius: 6px; font-size: 0.74em; line-height: 1.35; overflow: auto; white-space: pre-wrap; word-break: break-word; }
+  pre code { background: transparent; padding: 0; color: #f3f4f6; font-size: 1em; line-height: 1.35; }
   ul { margin-left: 1.2em; }
   li { margin-bottom: 10px; line-height: 1.6; }
   .tag { background: #f97583; color: #0f1117; padding: 4px 14px; border-radius: 20px; font-size: 0.75em; font-weight: bold; display: inline-block; margin-bottom: 18px; }
