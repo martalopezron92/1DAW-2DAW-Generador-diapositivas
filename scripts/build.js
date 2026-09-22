@@ -39,9 +39,16 @@ async function collectMarkdownFiles(dir) {
 }
 
 function runMarp(inputFile, outputFile) {
-  const npxCommand = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  const marpCli = path.join(
+    PROJECT_ROOT,
+    'node_modules',
+    '@marp-team',
+    'marp-cli',
+    'marp-cli.js',
+  );
+
   const args = [
-    'marp',
+    marpCli,
     inputFile,
     '--html',
     '--allow-local-files',
@@ -54,19 +61,25 @@ function runMarp(inputFile, outputFile) {
   ];
 
   return new Promise((resolve, reject) => {
-    const child = spawn(npxCommand, args, {
+    const child = spawn(process.execPath, args, {
       cwd: PROJECT_ROOT,
       stdio: 'inherit',
       shell: false,
     });
 
     child.on('error', reject);
+
     child.on('close', (code) => {
       if (code === 0) {
         resolve();
         return;
       }
-      reject(new Error(`Marp finalizó con código ${code} en ${inputFile}`));
+
+      reject(
+        new Error(
+          `Marp finalizó con código ${code} en ${inputFile}`,
+        ),
+      );
     });
   });
 }
