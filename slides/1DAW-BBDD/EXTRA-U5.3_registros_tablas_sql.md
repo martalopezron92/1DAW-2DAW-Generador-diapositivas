@@ -190,6 +190,8 @@ Nombres(5) := 'Marta';    -- Los índices no tienen que ser consecutivos
 Nombres(-3) := 'Pedro';   -- Pueden ser negativos
 ```
 
+---
+
 ## Tabla de registros (muy frecuente)
 ```sql
 TYPE T_Tabla_Hoteles IS TABLE OF Hotel%ROWTYPE
