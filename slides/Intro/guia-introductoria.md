@@ -100,6 +100,25 @@ git --version     # comprueba que está instalado
 
 > 🧠 **Analogía:** Git es como el *editor de fotos*; GitHub es como *Instagram* donde las compartes. (Existen alternativas: GitLab, Bitbucket.)
 
+
+---
+
+# Las 3 áreas de Git
+
+```
+ Directorio de trabajo      Área de preparación       Repositorio local
+   (Working Directory)         (Staging Area)            (.git)
+ ┌───────────────────┐      ┌─────────────────┐     ┌──────────────────┐
+ │  Tus archivos,    │ add  │ Cambios listos  │commit│ Historial de     │
+ │  los editas aquí  │ ───► │ para guardar    │ ───► │ commits guardados│
+ └───────────────────┘      └─────────────────┘     └──────────────────┘
+```
+
+- **Working directory:** donde editas.
+- **Staging area:** "la cesta" con lo que quieres guardar.
+- **Repositorio local:** el historial permanente.
+
+
 ---
 
 # Configuración inicial (solo una vez)
@@ -142,33 +161,28 @@ Te dice **en qué estado está cada archivo**. Úsalo constantemente.
 
 ---
 
-# Las 3 áreas de Git
+# `.gitignore`: lo que NO se sube
 
+Archivo en la raíz que lista lo que Git debe ignorar:
+
+```gitignore
+# Archivos temporales
+*.log
+*.tmp
+
+# Dependencias
+node_modules/
+
+# Configuración local o secretos
+.env
+.vscode/
+
+# Compilados
+*.class
+build/
 ```
- Directorio de trabajo      Área de preparación       Repositorio local
-   (Working Directory)         (Staging Area)            (.git)
- ┌───────────────────┐      ┌─────────────────┐     ┌──────────────────┐
- │  Tus archivos,    │ add  │ Cambios listos  │commit│ Historial de     │
- │  los editas aquí  │ ───► │ para guardar    │ ───► │ commits guardados│
- └───────────────────┘      └─────────────────┘     └──────────────────┘
-```
 
-- **Working directory:** donde editas.
-- **Staging area:** "la cesta" con lo que quieres guardar.
-- **Repositorio local:** el historial permanente.
-
----
-
-# Estados de un archivo
-
-| Estado | Significado | Cómo se llega |
-|---|---|---|
-| **Untracked** | Git no lo conoce | Archivo nuevo |
-| **Modified** | Cambiado, sin preparar | Editas un archivo |
-| **Staged** | Preparado para el commit | `git add` |
-| **Committed** | Guardado en el historial | `git commit` |
-
-`git status` te muestra en cuál está cada archivo (en rojo = sin preparar, en verde = preparado).
+❌ Nunca subas contraseñas, tokens ni archivos pesados innecesarios.
 
 ---
 
@@ -215,6 +229,19 @@ Regla: **verbo en infinitivo/presente + qué has hecho**.
 
 ---
 
+# Estados de un archivo
+
+| Estado | Significado | Cómo se llega |
+|---|---|---|
+| **Untracked** | Git no lo conoce | Archivo nuevo |
+| **Modified** | Cambiado, sin preparar | Editas un archivo |
+| **Staged** | Preparado para el commit | `git add` |
+| **Committed** | Guardado en el historial | `git commit` |
+
+`git status` te muestra en cuál está cada archivo (en rojo = sin preparar, en verde = preparado).
+
+---
+
 # Ver el historial y los cambios
 
 ```bash
@@ -253,7 +280,7 @@ git switch main               # vuelve a main
 git merge mi-rama             # fusiona mi-rama en la actual
 ```
 
-> Para las prácticas básicas trabajarás en **`main`**. Las ramas las veremos en profundidad más adelante.
+> Para las prácticas básicas trabajarás en **`main`**.
 
 ---
 
@@ -354,32 +381,6 @@ ssh-keygen -t ed25519 -C "tu_correo@ejemplo.com"
 cat ~/.ssh/id_ed25519.pub     # copia esto en GitHub → Settings → SSH keys
 git remote set-url origin git@github.com:usuario/mi-practica.git
 ```
-
----
-
-# `.gitignore`: lo que NO se sube
-
-Archivo en la raíz que lista lo que Git debe ignorar:
-
-```gitignore
-# Archivos temporales
-*.log
-*.tmp
-
-# Dependencias
-node_modules/
-
-# Configuración local o secretos
-.env
-.vscode/
-
-# Compilados
-*.class
-build/
-```
-
-❌ Nunca subas contraseñas, tokens ni archivos pesados innecesarios.
-
 ---
 
 # Errores comunes y soluciones
