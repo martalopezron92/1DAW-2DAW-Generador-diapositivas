@@ -68,6 +68,8 @@ Al terminar esta práctica tendrás:
    - ✅ *Añadir a PATH* (suele venir marcada)
 5. Pulsa **Instalar** y, al acabar, **Finalizar**.
 
+---
+
 ### 3.3 Comprobar que funciona
 
 1. Abre **Visual Studio Code** desde el menú Inicio.
@@ -78,6 +80,8 @@ Al terminar esta práctica tendrás:
 1. Pulsa `Ctrl + Shift + X` (abre Extensiones).
 2. Busca **Spanish Language Pack for Visual Studio Code**.
 3. Pulsa **Install** y después **Restart** cuando lo pida.
+
+---
 
 ### 3.5 Extensiones recomendadas para el curso
 
@@ -103,6 +107,8 @@ En el panel de Extensiones (`Ctrl + Shift + X`) busca e instala:
 1. Entra en: **https://git-scm.com/downloads**
 2. Pulsa **Windows** y descarga la versión de **64-bit** (*"Git for Windows Setup"*).
 
+---
+
 ### 4.2 Instalar (Windows)
 
 Se abrirá un asistente con muchas pantallas. **Para la mayoría basta con pulsar "Next"**. Estas son las que importan:
@@ -121,6 +127,8 @@ Se abrirá un asistente con muchas pantallas. **Para la mayoría basta con pulsa
 3. Al terminar, desmarca *"View Release Notes"* y pulsa **Finish**.
 
 > ⚠️ **Muy importante:** no cambies la opción *Git Credential Manager*. Es la pieza que hace que iniciar sesión en GitHub sea tan sencillo (Paso 5).
+
+---
 
 ### 4.3 Comprobar la instalación
 
@@ -193,6 +201,8 @@ Tu usuario aparecerá en las URLs de tus prácticas (`github.com/tu-usuario/...`
 - ✅ Profesional y reconocible: `ana-garcia`, `agarcia-dev`, `juan.perez`
 - ❌ Evita: `xX_killer_Xx`, `pepito69`, nombres con faltas o bromas
 
+---
+
 ### 6.3 Verificar el correo
 
 1. GitHub enviará un **código** a tu correo.
@@ -228,6 +238,8 @@ Para subir tu trabajo (`git push`), GitHub tiene que saber que **eres tú**. Hay
 
 Solo tendrás que iniciar sesión **la primera vez**. Después, el equipo recordará tus credenciales.
 
+---
+
 ### 7.2 Crear un repositorio de prueba en GitHub
 
 1. En GitHub, pulsa el botón **+** (arriba a la derecha) → **New repository**.
@@ -257,6 +269,8 @@ code .
 
 > `code .` abre la carpeta actual en VS Code. Si no funciona, usa **Archivo → Abrir carpeta**.
 
+---
+
 ### 7.4 Hacer un cambio y subirlo (aquí te autenticas)
 
 1. En VS Code, abre el archivo `README.md`.
@@ -274,6 +288,7 @@ git add .
 git commit -m "Añade mi presentación al README"
 git push
 ```
+---
 
 ### 7.5 ¡Inicio de sesión!
 
@@ -322,6 +337,8 @@ Si la ventana emergente no aparece, o prefieres hacerlo desde VS Code:
    - Tu commit **"Añade mi presentación al README"** en el historial.
    - Tu nombre de usuario como autor.
 
+---
+
 ### ✍️ Mini-ejercicio
 
 Repite el ciclo una vez más **sin ayuda**:
@@ -344,6 +361,11 @@ Repite el ciclo una vez más **sin ayuda**:
 | `Authentication failed` / pide contraseña | Contraseña escrita en terminal | GitHub no la acepta. Usa el inicio de sesión por navegador (7.5) |
 | No aparece la ventana de inicio de sesión | Git Credential Manager no instalado | Usa la alternativa 7.6 o reinstala Git |
 | No me llega el correo de verificación | Correo mal escrito o en spam | Revisa spam; en GitHub pulsa *Resend* |
+
+---
+
+| Problema | Causa probable | Solución |
+|---|---|---|
 | `Repository not found` | URL mal copiada o repo privado de otra cuenta | Revisa la URL y que estés logueado con tu usuario |
 | Quiero cambiar de cuenta de GitHub | Credencial guardada anterior | Windows: *Administrador de credenciales → Credenciales de Windows* → borra las de `git:https://github.com` |
 | `fatal: not a git repository` | Terminal fuera de la carpeta del repo | Usa `cd` para entrar en la carpeta del repo |
@@ -363,19 +385,6 @@ Marca cada punto cuando lo hayas conseguido:
 - [ ] Primer `git push` realizado con inicio de sesión por navegador
 - [ ] El segundo `git push` (`datos.md`) funciona **sin** pedir credenciales
 
-### 📤 Qué entregar
-
-Envía al profesor:
-
-1. La **URL** de tu repositorio `prueba-autenticacion`
-   *(ej.: `https://github.com/tu-usuario/prueba-autenticacion`)*
-2. Una **captura de pantalla** de la terminal con el resultado de:
-
-```bash
-git --version
-git log --oneline
-```
-
 ---
 
 ## 📚 Recursos de ayuda
@@ -386,4 +395,4 @@ git log --oneline
 - 📘 Documentación de GitHub en español: https://docs.github.com/es
 - 📘 Libro Pro Git (gratuito): https://git-scm.com/book/es/v2
 
-> 💬 Si algo no funciona, **no te bloquees**: copia el mensaje de error completo y pregunta al profesor o a un compañero.
+
