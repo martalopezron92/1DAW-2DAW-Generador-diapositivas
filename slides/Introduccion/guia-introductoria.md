@@ -616,6 +616,294 @@ Otros tipos: `sequenceDiagram`, `classDiagram`, `gantt`, `pie`, `erDiagram`.
 
 ---
 
+<style scoped>section { font-size: 22px; }</style>
+
+# Mermaid: cómo funciona
+
+Todo diagrama Mermaid sigue la misma estructura:
+
+````markdown
+```mermaid
+tipoDeDiagrama          ← 1.ª línea: qué diagrama es
+    elemento1 --> elemento2   ← relaciones, una por línea
+```
+````
+
+| Diagrama | Palabra clave | Para qué sirve |
+|---|---|---|
+| Diagrama de flujo | `flowchart` | Algoritmos, procesos, decisiones |
+| Modelo E/R | `erDiagram` | Diseño de bases de datos |
+| Diagrama de clases | `classDiagram` | Programación orientada a objetos (UML) |
+
+- La **sangría** no es obligatoria, pero mejora la lectura.
+- Comentarios con `%%` al inicio de la línea.
+- Prueba tus diagramas en vivo: https://mermaid.live
+
+---
+
+<style scoped>section { font-size: 22px; }</style>
+
+# Diagrama de flujo (1): dirección y nodos
+
+Se empieza con `flowchart` + **dirección**:
+
+| `TD` / `TB` | `BT` | `LR` | `RL` |
+|:---:|:---:|:---:|:---:|
+| Arriba → abajo | Abajo → arriba | Izquierda → derecha | Derecha → izquierda |
+
+Cada nodo tiene un **identificador** y un **texto**; los corchetes indican la **forma**:
+
+| Sintaxis | Forma | Uso habitual |
+|---|---|---|
+| `A[Texto]` | Rectángulo | Proceso / acción |
+| `A(Texto)` | Bordes redondeados | Paso genérico |
+| `A([Texto])` | Píldora (estadio) | Inicio / Fin |
+| `A{Texto}` | Rombo | Decisión (sí/no) |
+| `A[/Texto/]` | Paralelogramo | Entrada / salida de datos |
+| `A[(Texto)]` | Cilindro | Base de datos |
+| `A((Texto))` | Círculo | Conector |
+
+---
+
+<style scoped>section { font-size: 22px; }</style>
+
+# Diagrama de flujo (2): flechas y etiquetas
+
+```
+A --> B          %% flecha
+A --- B          %% línea sin flecha
+A -.-> B         %% flecha discontinua
+A ==> B          %% flecha gruesa
+A -->|sí| B      %% flecha con texto
+A -- sí --> B    %% flecha con texto (otra forma)
+A --> B & C      %% una flecha a varios nodos
+```
+
+- El identificador (`A`, `B`…) se define **una vez** con su texto; después basta con el identificador.
+- **Subgrupos** de nodos:
+
+```
+subgraph Validación
+    B --> C
+end
+```
+
+---
+
+# Diagrama de flujo (3): ejemplo completo
+
+````markdown
+```mermaid
+flowchart TD
+    A([Inicio]) --> B[/Introducir nota/]
+    B --> C{¿Nota >= 5?}
+    C -->|Sí| D[Mostrar 'Aprobado']
+    C -->|No| E[Mostrar 'Suspenso']
+    D --> F([Fin])
+    E --> F
+```
+````
+
+Lectura: se pide una nota (**entrada**), se **decide** si es ≥ 5 y cada rama muestra un mensaje distinto antes de llegar al **fin**.
+
+> 💡 Si el texto lleva símbolos raros (`( ) { } "`), ponlo entre comillas: `A["Total (con IVA)"]`.
+
+---
+
+<style scoped>section { font-size: 21px; }</style>
+
+# Modelo E/R (1): entidades y atributos
+
+Se empieza con `erDiagram`. Cada **entidad** se escribe con sus **atributos** entre llaves:
+
+```
+erDiagram
+    ALUMNO {
+        int    id_alumno  PK
+        string nombre
+        string email      UK
+        int    id_curso   FK
+    }
+```
+
+Formato de cada atributo: **`tipo nombre [clave] ["comentario"]`**
+
+| Clave | Significado |
+|---|---|
+| `PK` | Clave primaria (*Primary Key*) |
+| `FK` | Clave foránea (*Foreign Key*) |
+| `UK` | Valor único (*Unique Key*) |
+
+- El tipo es libre (`int`, `string`, `date`, `varchar`…): Mermaid no lo valida.
+- Nombres de entidad **sin espacios** (usa `_` o comillas).
+
+---
+
+<style scoped>section { font-size: 22px; }</style>
+
+# Modelo E/R (2): relaciones y cardinalidad
+
+Sintaxis: **`ENTIDAD1 izq--der ENTIDAD2 : "verbo"`**
+
+Cada extremo de la línea indica la **cardinalidad** (notación *pata de gallo*):
+
+```
+Izq.  Der.   Significado
+ |o    o|    Cero o uno         (0..1)
+ ||    ||    Exactamente uno    (1)
+ }o    o{    Cero o muchos      (0..N)
+ }|    |{    Uno o muchos       (1..N)
+```
+
+- `--` línea **continua**: relación identificadora.
+- `..` línea **discontinua**: relación no identificadora.
+
+Ejemplo: `CURSO ||--o{ ALUMNO : "tiene"` → *un curso tiene cero o muchos alumnos; cada alumno pertenece a exactamente un curso.*
+
+---
+
+<style scoped>section { font-size: 16px; }</style>
+
+# Modelo E/R (3): ejemplo completo
+
+````markdown
+```mermaid
+erDiagram
+    CURSO ||--o{ ALUMNO : "tiene"
+    ALUMNO ||--o{ MATRICULA : "realiza"
+    ASIGNATURA ||--o{ MATRICULA : "incluye"
+
+    CURSO {
+        int id_curso PK
+        string nombre
+    }
+    ALUMNO {
+        int id_alumno PK
+        string nombre
+        int id_curso FK
+    }
+    MATRICULA {
+        int id_alumno PK, FK
+        int id_asignatura PK, FK
+        float nota
+    }
+    ASIGNATURA {
+        int id_asignatura PK
+        string nombre
+        int horas
+    }
+```
+````
+
+> 💡 La relación N:M entre `ALUMNO` y `ASIGNATURA` se resuelve con la entidad intermedia `MATRICULA` (clave primaria compuesta).
+
+---
+
+<style scoped>section { font-size: 20px; }</style>
+
+# Diagrama de clases (1): definir una clase
+
+Se empieza con `classDiagram`. Atributos y métodos van entre llaves:
+
+```
+classDiagram
+    class Persona {
+        -String nombre
+        -int edad
+        +Persona(nombre, edad)
+        +getNombre() String
+        +cumplirAnios() void
+    }
+```
+
+- Si lleva `()` es un **método**; si no, un **atributo**.
+- El tipo de retorno va **después** del método: `getNombre() String`.
+
+| Símbolo | Visibilidad |
+|:---:|---|
+| `+` | Pública |
+| `-` | Privada |
+| `#` | Protegida |
+| `~` | De paquete |
+
+Extras: `$` al final = estático · `*` al final = abstracto · `<<interface>>` / `<<abstract>>` para estereotipos.
+
+---
+
+<style scoped>section { font-size: 22px; }</style>
+
+# Diagrama de clases (2): relaciones
+
+Sintaxis: **`ClaseA flecha ClaseB : etiqueta`**
+
+```
+A <|-- B    %% Herencia:     B es un A
+A <|.. B    %% Realización:  B implementa la interfaz A
+A *-- B     %% Composición:  B no existe sin A
+A o-- B     %% Agregación:   A contiene B, pero B vive por sí solo
+A --> B     %% Asociación:   A usa / conoce a B
+A ..> B     %% Dependencia:  A depende puntualmente de B
+```
+
+**Multiplicidad**: entre comillas junto a cada clase:
+
+```
+Curso "1" --> "1..*" Alumno : tiene
+```
+
+Valores habituales: `1`, `0..1`, `*`, `1..*`, `0..*`.
+
+---
+
+<style scoped>section { font-size: 17px; }</style>
+
+# Diagrama de clases (3): ejemplo completo
+
+````markdown
+```mermaid
+classDiagram
+    class Persona {
+        <<abstract>>
+        -String nombre
+        +getNombre() String
+    }
+    class Alumno {
+        -String expediente
+        +matricular(Asignatura a) void
+    }
+    class Profesor {
+        -String departamento
+    }
+    class Asignatura {
+        -String nombre
+        -int horas
+    }
+
+    Persona <|-- Alumno
+    Persona <|-- Profesor
+    Alumno "0..*" --> "1..*" Asignatura : cursa
+    Profesor "1" --> "0..*" Asignatura : imparte
+```
+````
+
+Lectura: `Alumno` y `Profesor` **heredan** de la clase abstracta `Persona`; un alumno cursa una o varias asignaturas y cada asignatura la imparte un profesor.
+
+---
+
+# 🧪 Mini-ejercicio: Mermaid
+
+Añade a un `README.md` estos tres diagramas y comprueba que GitHub los renderiza:
+
+1. **Flujo:** algoritmo que pide un número y dice si es par o impar (inicio, entrada, decisión, dos salidas y fin).
+2. **E/R:** una biblioteca con `SOCIO`, `LIBRO` y `PRESTAMO` (con PK, FK y cardinalidades).
+3. **Clases:** `Vehiculo` (abstracta) con dos subclases `Coche` y `Moto`, y una clase `Garaje` que **agrega** vehículos.
+
+Haz commit: `"Añade diagramas Mermaid al README"`.
+
+> 💡 Si un diagrama no aparece, copia el código en https://mermaid.live: te marcará la línea del error.
+
+---
+
 # Otros elementos útiles
 
 **Escapar símbolos:** `\*no es cursiva\*` → \*no es cursiva\*
