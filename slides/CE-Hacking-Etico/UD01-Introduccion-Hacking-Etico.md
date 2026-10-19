@@ -262,7 +262,13 @@ Una medida puede pertenecer a **varias categorías** (p. ej., *suites* que previ
 
 <br>
 
+<details>
+<summary>
+
 **Solución:** cortafuegos → activa/lógica · copia → pasiva/lógica · SAI → pasiva/física · antivirus → **activa y pasiva**/lógica · biométrico → activa/física.
+
+</summary>
+</details>
 
 ---
 
@@ -1176,6 +1182,9 @@ La ciberseguridad avanza a pasos agigantados → **actualización constante**.
 
 ---
 
+<details>
+<summary>
+
 ## Soluciones
 
 <!-- _class: tiny -->
@@ -1195,6 +1204,8 @@ La ciberseguridad avanza a pasos agigantados → **actualización constante**.
 13. *Pentest*: puntual, objetivo concreto, corta duración · *Red teaming*: continuo, emula APT, evitando ser detectado.
 14. Indica cómo **reportar vulnerabilidades** (RFC 9116); en la raíz del dominio o en `/.well-known/`.
 
+</summary>
+</details>
 ---
 
 ## Glosario rápido
