@@ -11,5 +11,8 @@
   "devDependencies": {
     "@marp-team/marp-cli": "^4.1.2",
     "serve": "^14.2.4"
+  },
+  "dependencies": {
+    "mermaid": "^12.2.0"
   }
 }

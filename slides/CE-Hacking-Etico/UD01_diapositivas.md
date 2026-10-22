@@ -43,7 +43,7 @@ footer: "Curso de Especialización en Ciberseguridad · Hacking Ético"
 <!-- content: UD01-C01 -->
 ## 1.1 · Origen histórico de la cultura hacker
 
-**Pregunta guiada:** ¿por qué una solución ingeniosa terminó asociándose en el imaginario popular con el delito informático?
+*¿Por qué una solución ingeniosa terminó asociándose en el imaginario popular con el delito informático?*
 
 - **Etimología:** el término *hack* surgió en los laboratorios de computación del MIT (finales de los años 60 y principios de los 70) para designar una **solución rápida, elegante e ingeniosa** a un desafío técnico complejo.
 - **Valores fundacionales:** experimentación empírica, optimización de recursos limitados y libre intercambio de información técnica entre investigadores.
@@ -98,6 +98,7 @@ Los delitos informáticos han evolucionado desde la curiosidad individual hacia 
 <!-- content: UD01-C01 -->
 ## 1.5 · Pilares de la seguridad de la información: Tríada CIA ampliada
 
+
 ```mermaid
 flowchart TB
     SI["Seguridad de la información"]
@@ -113,6 +114,7 @@ flowchart TB
     A --> A1["Certeza de identidad (factores de autenticación / MFA)"]
     NR --> NR1["Ni emisor ni receptor pueden negar la transacción"]
 ```
+
 
 - **Tríada CIA:** núcleo universal de cualquier política de seguridad (Confidencialidad, Integridad y Disponibilidad).
 - **Autenticación y No Repudio:** indispensables en arquitecturas distribuidas y comunicaciones entre múltiples partes.

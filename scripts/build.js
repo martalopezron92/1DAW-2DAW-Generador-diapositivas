@@ -8,6 +8,13 @@ const DIST_DIR = path.join(PROJECT_ROOT, 'dist');
 const STYLES_DIR = path.join(PROJECT_ROOT, 'styles');
 const THEME_FILE = path.join(STYLES_DIR, 'slides-theme.css');
 const INDEX_CSS_FILE = path.join(STYLES_DIR, 'index.css');
+const MERMAID_BUNDLE = path.join(
+  PROJECT_ROOT,
+  'node_modules',
+  'mermaid',
+  'dist',
+  'mermaid.min.js',
+);
 
 const SITE_TITLE = process.env.SITE_TITLE || 'Presentaciones docentes';
 
@@ -82,6 +89,54 @@ function runMarp(inputFile, outputFile) {
       );
     });
   });
+}
+
+async function addMermaidRenderer(htmlFile) {
+  const html = await fs.readFile(htmlFile, 'utf8');
+  if (!html.includes('class="language-mermaid"')) {
+    return;
+  }
+
+  const mermaidBundle = path.relative(
+    path.dirname(htmlFile),
+    path.join(DIST_DIR, 'assets', 'mermaid.min.js'),
+  );
+  const scriptUrl = encodeWebPathSegments(toWebPath(mermaidBundle));
+  const mermaidScripts = `
+<script src="${scriptUrl}"></script>
+<script>
+mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
+const diagrams = Array.from(document.querySelectorAll('code.language-mermaid'))
+  .map((code) => {
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    code.parentElement.replaceWith(diagram);
+    return diagram;
+  });
+
+if (diagrams.length > 0) {
+  mermaid.run({ nodes: diagrams }).catch((error) => {
+    console.error('No se pudieron renderizar los diagramas Mermaid:', error);
+    diagrams.forEach((diagram) => {
+      if (!diagram.querySelector('svg')) {
+        diagram.classList.add('mermaid-error');
+        diagram.textContent = 'No se pudo representar este diagrama Mermaid. Revisa la consola del navegador.';
+      }
+    });
+  });
+}
+</script>`;
+
+  if (!html.includes('</body>')) {
+    throw new Error(`No se encontró </body> en el HTML generado: ${htmlFile}`);
+  }
+
+  await fs.writeFile(
+    htmlFile,
+    html.replace('</body>', `${mermaidScripts}</body>`),
+    'utf8',
+  );
 }
 
 function slugToTitle(value) {
@@ -214,8 +269,16 @@ async function main() {
     throw new Error('No existe styles/index.css.');
   }
 
+  if (!await pathExists(MERMAID_BUNDLE)) {
+    throw new Error('No existe node_modules/mermaid/dist/mermaid.min.js.');
+  }
+
   await fs.rm(DIST_DIR, { recursive: true, force: true });
   await ensureFolders();
+  await fs.copyFile(
+    MERMAID_BUNDLE,
+    path.join(DIST_DIR, 'assets', 'mermaid.min.js'),
+  );
 
   const markdownFiles = await collectMarkdownFiles(SLIDES_DIR);
 
@@ -228,6 +291,7 @@ async function main() {
 
     await fs.mkdir(path.dirname(outputFile), { recursive: true });
     await runMarp(mdFile, outputFile);
+    await addMermaidRenderer(outputFile);
 
     generatedItems.push({
       relativeMd: toWebPath(relativeMd),

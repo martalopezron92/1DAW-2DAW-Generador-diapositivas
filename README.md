@@ -71,10 +71,17 @@ El script `scripts/build.js` hace automáticamente:
 1. Limpia `dist/`.
 2. Recorre recursivamente `slides/` para detectar todos los `.md`.
 3. Compila cada Markdown a HTML con Marp.
-4. Mantiene la estructura de carpetas en salida (`dist/<asignatura>/<presentacion>.html`).
-5. Genera `dist/index.html` de forma dinámica.
-6. Copia estilos del índice en `dist/assets/index.css`.
-7. Crea `dist/.nojekyll` para compatibilidad con Pages.
+4. Añade el renderizador local de Mermaid a cada presentación HTML.
+5. Mantiene la estructura de carpetas en salida (`dist/<asignatura>/<presentacion>.html`).
+6. Genera `dist/index.html` de forma dinámica.
+7. Copia los estilos y el renderizador de Mermaid a `dist/assets/`.
+8. Crea `dist/.nojekyll` para compatibilidad con Pages.
+
+Los bloques de código con el identificador de lenguaje `mermaid` se convierten en
+diagramas al abrir la presentación HTML. Mermaid se incluye como recurso local, por lo
+que no se necesita conexión a Internet para renderizarlos. Si un diagrama tiene
+sintaxis no válida, se muestra un aviso y se registra el error en la consola del
+navegador.
 
 ## 6) Índice general automático
 
