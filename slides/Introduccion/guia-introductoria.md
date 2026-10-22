@@ -3,15 +3,6 @@ marp: true
 theme: course-theme
 paginate: true
 header: "Git, GitHub y Markdown"
-style: |
-  section { font-size: 26px; }
-  section h1 { color: #0b5cad; }
-  section h2 { color: #0b5cad; }
-  code { background: #eef2f7; }
-  table { font-size: 22px; }
-  section.lead { text-align: center; justify-content: center; }
-  section.part { background: #0b5cad; color: white; text-align: center; justify-content: center; }
-  section.part h1 { color: white; }
 ---
 
 <!-- _class: lead -->
@@ -505,7 +496,6 @@ Reglas:
 - [x] Tarea hecha
 - [ ] Tarea pendiente
 ```
----
 
 Resultado:
 
@@ -1084,7 +1074,7 @@ Antes de enviar la URL, comprueba:
 
 ---
 
-<!-- _class: lead -->
+
 <!-- _paginate: false -->
 
 # ¡Resumen!

@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: slides-theme
+theme: course-theme
 paginate: true
 size: 16:9
 lang: es
@@ -423,9 +423,9 @@ Según la **Guía de ciberataques del INCIBE**:
                           TIPOS DE ATAQUES
    ┌──────────────┬───────────────┬──────────────┬──────────────┐
    ▼              ▼               ▼              ▼              ▼
- A contraseñas  Ingeniería      A las          Por malware    + Ampliación del libro:
-                social          conexiones     (ya visto)     · Cadena de suministro
-                                                              · Invisibles en código fuente
+ A contraseñas  Ingeniería      A las          Por malware    · Cadena de suministro
+                social          conexiones     (ya visto)     · Invisibles en código fuente
+                                                              
 ```
 
 ---
