@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: slides-theme
 paginate: true
 size: 16:9
 lang: es
@@ -8,34 +8,7 @@ title: "UD01 · Introducción al hacking ético"
 description: "Conceptos de seguridad de la información, amenazas, vulnerabilidades, pentesting y recursos de aprendizaje"
 header: "UD01 · Introducción al *hacking* ético"
 footer: "Hacking ético · Unidad 1"
-style: |
-  section {
-    font-size: 23px;
-    padding: 50px 60px 50px 60px;
-    background: #ffffff;
-    color: #1f2937;
-  }
-  h1 { color: #1e3a8a; font-size: 1.7em; }
-  h2 { color: #1e40af; font-size: 1.35em; border-bottom: 3px solid #93c5fd; padding-bottom: 4px; }
-  h3 { color: #2563eb; font-size: 1.05em; margin-bottom: 0.2em; }
-  strong { color: #1e3a8a; }
-  em { color: #374151; }
-  table { font-size: 0.78em; margin: 0 auto; }
-  th { background: #1e40af; color: #fff; }
-  code { font-size: 0.9em; }
-  pre { font-size: 0.68em; line-height: 1.25; }
-  blockquote { border-left: 6px solid #60a5fa; background: #eff6ff; padding: 8px 16px; font-size: 0.9em; color: #1f2937; }
-  header, footer { color: #64748b; font-size: 14px; }
-  section.lead { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: #fff; }
-  section.lead h1, section.lead h2, section.lead h3, section.lead strong, section.lead em { color: #fff; border: none; }
-  th em, th strong { color: #fff; }
-  section.lead::after { color: #bfdbfe; }
-  section.lead header, section.lead footer { color: #bfdbfe; }
-  section.cols { columns: 2; column-gap: 40px; }
-  section.cols h2, section.cols > p:first-of-type { column-span: all; }
-  section.small { font-size: 19px; }
-  section.tiny { font-size: 17px; }
-  .muted { color: #6b7280; }
+
 ---
 
 <!-- _class: lead -->
