@@ -1,9 +1,8 @@
 ---
 marp: true
-theme: default
+theme: course-theme
 paginate: true
 header: "Git, GitHub y Markdown"
-footer: "Introducción · Cómo entregar las prácticas"
 style: |
   section { font-size: 26px; }
   section h1 { color: #0b5cad; }
@@ -97,6 +96,8 @@ git --version     # comprueba que está instalado
 | Dónde vive | Tu ordenador | Internet |
 | Necesita internet | No | Sí |
 | Función | Versionar el código | Compartir, colaborar, entregar |
+
+<br>
 
 > 🧠 **Analogía:** Git es como el *editor de fotos*; GitHub es como *Instagram* donde las compartes. (Existen alternativas: GitLab, Bitbucket.)
 
@@ -490,7 +491,6 @@ Reglas:
 - Un **salto de línea** = dos espacios al final o `\` .
 
 ---
-
 # Listas
 
 ```markdown
@@ -505,6 +505,7 @@ Reglas:
 - [x] Tarea hecha
 - [ ] Tarea pendiente
 ```
+---
 
 Resultado:
 

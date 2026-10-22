@@ -1,5 +1,5 @@
 {
   "markdown.marp.themes": [
-    "./styles/course-theme.css"
+    "./styles/slides-theme.css"
   ]
 }
