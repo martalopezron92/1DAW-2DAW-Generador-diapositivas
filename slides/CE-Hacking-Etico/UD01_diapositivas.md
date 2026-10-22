@@ -673,8 +673,7 @@ flowchart TD
 ## 6.6 · CVE (*Common Vulnerabilities and Exposures*)
 
 - **Gestor:** Corporación **MITRE** (`cve.org`) con respaldo de la CISA y las Autoridades de Asignación de Números (CNA).
-- **Formato del identificador:**
-  $$\text{CVE-AAAA-NNNNN}$$
+- **Formato del identificador:** CVE-AAAA-NNNNN
   - `CVE`: prefijo identificativo del estándar.
   - `AAAA`: año de asignación o publicación pública de la vulnerabilidad.
   - `NNNNN`: número correlativo asignado por la autoridad competente (mínimo 4 dígitos).
@@ -714,7 +713,7 @@ El estándar **Common Vulnerability Scoring System** evalúa la severidad median
 | **9.0 – 10.0** | Crítica (*Critical*) | **Acción inmediata (24-48 h)**; explotación remota sin interacción. |
 
 ### Ejemplo real de vector calculado: 9.4 (Crítica)
-$$\text{CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:H}$$
+*CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:H*
 - Explotable remotamente por red (`AV:N`), complejidad trivial (`AC:L`), sin necesidad de credenciales (`PR:N`), sin interacción de víctimas (`UI:N`), el alcance no cambia (`S:U`), impacto bajo en confidencialidad (`C:L`) e impacto devastador en integridad (`I:H`) y disponibilidad (`A:H`).
 
 ---
