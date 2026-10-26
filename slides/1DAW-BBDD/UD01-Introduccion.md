@@ -258,11 +258,22 @@ flowchart TD
     D["Datos ordenados: 001 ... 050 ... 099"] --> R
 ```
 
+<div class = cols>
+<div>
+
 - **Índice primario:** suele construirse sobre la clave de ordenación.
 - **Índice secundario:** acelera búsquedas por otros atributos, por ejemplo `APELLIDOS`.
 - Estructuras frecuentes: **árboles B/B+** e **ISAM**.
+
+</div>
+
+<div>
+
 - Ventaja: combina recorrido ordenado y acceso directo razonable.
 - Coste: espacio adicional, mantenimiento y posibles páginas de desbordamiento.
+
+</div>
+</div>
 
 > Un índice no es otra copia completa que sustituya a los datos: es una estructura auxiliar para encontrarlos mejor.
 ---
