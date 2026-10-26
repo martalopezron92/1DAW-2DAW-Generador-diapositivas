@@ -115,7 +115,7 @@ style: |
 ## Modelos de bases de datos y arquitectura cliente-servidor
 
 1º Desarrollo de Aplicaciones Web (DAW) · Unidad Didáctica 1
-Colegio Salesiano "San Ignacio" · Cádiz
+
 
 ---
 
@@ -1566,16 +1566,6 @@ Corrección: el original atribuye "Database System Concepts" a "Silberschatz, Ga
 
 ---
 
-# Próximas unidades
-
-| Unidad | Contenido |
-|---|---|
-| **UD2** | Modelo Entidad-Relación en profundidad |
-| **UD3** | Normalización de bases de datos |
-| **UD4** | SQL: lenguaje de consulta estructurado |
-
----
-
 # Resumen: conceptos clave
 
 | Tema | Conceptos principales |
@@ -1588,36 +1578,6 @@ Corrección: el original atribuye "Database System Concepts" a "Silberschatz, Ga
 
 ---
 
-# Competencias desarrolladas
-
-<div class="columnas">
-<div>
-
-Al finalizar esta unidad, el alumnado será capaz de:
-
-- **Distinguir** entre los diferentes modelos de datos.
-- **Evaluar** qué modelo usar según el contexto.
-- **Diseñar** arquitecturas cliente-servidor básicas.
-- **Analizar** ventajas y desventajas de cada enfoque.
-- **Aplicar** los conocimientos en casos prácticos reales.
-- **Justificar** decisiones técnicas de diseño.
-
-</div>
-<div>
-
-### Conexión con el futuro
-Estos conocimientos son la base para:
-- El diseño de sistemas empresariales.
-- Las arquitecturas *cloud native*.
-- El desarrollo de aplicaciones modernas.
-- La seguridad en sistemas distribuidos.
-- La escalabilidad y el rendimiento.
-
-</div>
-</div>
-
----
-
 <!-- _class: portada -->
 <!-- _paginate: false -->
 <!-- _header: "" -->
@@ -1627,4 +1587,4 @@ Estos conocimientos son la base para:
 
 Modelos de bases de datos y arquitectura cliente-servidor
 Bases de Datos · 1º DAW
-Colegio Salesiano "San Ignacio" · Cádiz
+
