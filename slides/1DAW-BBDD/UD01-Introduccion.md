@@ -90,6 +90,10 @@ style: |
   section.portada header, section.portada footer,
   section.seccion header, section.seccion footer { color: #9fb2c8; }
   section.portada::after, section.seccion::after { color: #9fb2c8; }
+  section.cols { 
+    columns: 2; 
+    column-gap: 40px; 
+  }
 
 ---
 
@@ -257,18 +261,13 @@ flowchart TD
     I --> P["Localizar página"] --> R["Leer registro"]
     D["Datos ordenados: 001 ... 050 ... 099"] --> R
 ```
+---
 
-<div class = cols>
-<div>
+# Organización indexada
 
 - **Índice primario:** suele construirse sobre la clave de ordenación.
 - **Índice secundario:** acelera búsquedas por otros atributos, por ejemplo `APELLIDOS`.
 - Estructuras frecuentes: **árboles B/B+** e **ISAM**.
-
-</div>
-
-<div>
-
 - Ventaja: combina recorrido ordenado y acceso directo razonable.
 - Coste: espacio adicional, mantenimiento y posibles páginas de desbordamiento.
 
@@ -278,7 +277,7 @@ flowchart TD
 > Un índice no es otra copia completa que sustituya a los datos: es una estructura auxiliar para encontrarlos mejor.
 ---
 
-# Definición y ejemplo
+# Sistema gestor de fichero: Definición y ejemplo
 
 > **Sistema gestor de ficheros:** sistema de almacenamiento en el que los datos se guardan en archivos con una estructura particular.
 
@@ -574,7 +573,7 @@ Cada usuario accede solo a lo autorizado.
 # Arquitectura de tres niveles: ANSI/SPARC
 
 ```mermaid
-flowchart TB
+flowchart LR
     E["Externo\nvistas de usuarios"] --> C["Conceptual\nesquema lógico global"] --> I["Interno\nficheros, páginas e índices"]
 ```
 
