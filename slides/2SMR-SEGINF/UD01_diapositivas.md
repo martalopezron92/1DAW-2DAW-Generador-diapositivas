@@ -4,20 +4,6 @@ theme: course-theme
 header: "Seguridad Informática · UD01"
 footer: "2SMR · Seguridad Informática"
 paginate: true
-style: |
-  section table {
-    margin: 30px auto;
-
-  }
-
-  section img {
-    margin: 30px auto;
-  }
-
-  section summary{
-    font-weight: bolder;
-    color: #1e3a8a;
-  }
 ---
 
 <!-- _class: lead -->
@@ -84,8 +70,6 @@ La **seguridad informática** es el conjunto de medidas y controles que protegen
 
 ## Objetivos: modelo CIDN
 
-<br>
-
 | Objetivo | Pregunta de control | Ejemplo |
 |---|---|---|
 | **Confidencialidad** | ¿Quién puede leerlo? | Expediente médico restringido |
@@ -98,8 +82,6 @@ La **seguridad informática** es el conjunto de medidas y controles que protegen
 <!-- content: UD01-C01 -->
 
 ## Mecanismos de protección
-
-<br>
 
 | Mecanismo | Función principal |
 |---|---|
@@ -118,16 +100,12 @@ La **seguridad informática** es el conjunto de medidas y controles que protegen
 
 ## Clasificaciones complementarias
 
-<br>
-
 | Eje | Tipo | Qué protege o cuándo actúa | Ejemplos |
 |---|---|---|---|
 | Elemento | **Física** | Hardware y entorno | SAI, extintores, control de acceso |
 | Elemento | **Lógica** | Software, aplicaciones y datos | Contraseñas, permisos, cifrado |
 | Momento | **Activa** | Previene antes del incidente | Firewall, antivirus |
 | Momento | **Pasiva** | Minimiza el daño posterior | Copias, SAI, RAID |
-
-<br>
 
 > **Seguridad pasiva** no significa inacción: permite continuar o recuperar el servicio después de un fallo.
 
@@ -144,7 +122,7 @@ Relaciona cada medida con el objetivo que protege principalmente:
 3. Firma electrónica de una factura.
 4. Control de permisos de una carpeta.
 
-<details><summary><strong>Ver solución</strong></summary>
+<details><summary>Ver solución</summary>
 
 1. Cifrado → **confidencialidad**.
 2. Copia → **disponibilidad** (y recuperación frente a pérdida).
@@ -167,8 +145,6 @@ Nombrar correctamente el riesgo permite decidir cómo reducirlo.
 <!-- content: UD01-C02 -->
 
 ## Terminología de seguridad
-
-<br>
 
 | Término | Definición técnica | Ejemplo |
 |---|---|---|
@@ -236,16 +212,12 @@ Una vulnerabilidad puede registrarse mediante un **CVE** (*Common Vulnerabilitie
 
 ## Atacantes y tipos de ataque
 
-<br>
-
 | Perfil | Objetivo descrito en la unidad |
 |---|---|
 | Cracker | Romper la protección de un software. |
 | Phreaker | Aprovechar ilegalmente telecomunicaciones. |
 | Crasher | Provocar que un sistema deje de funcionar. |
 | Hacker | Saltarse la seguridad para acceder a información. |
-
-<br>
 
 Los ataques pueden ser **internos** —personal o ex-personal con conocimiento del sistema— o **externos**. También pueden explotar bugs, malware, amenazas físicas o ingeniería social.
 
@@ -276,7 +248,7 @@ Un servidor contiene datos de clientes y ejecuta un sistema sin actualizar. Un a
 
 Identifica: **activo, vulnerabilidad, amenaza, ataque e impacto**.
 
-<details><summary><strong>Ver solución</strong></summary>
+<details><summary>Ver solución</summary>
 
 Activo → datos de clientes y servidor. Vulnerabilidad → sistema sin actualizar. Amenaza → atacante externo. Ataque → explotación del fallo y copia de datos. Impacto → filtración e interrupción del servicio.
 
@@ -315,16 +287,12 @@ Puede usar técnicas manuales —observación, entrevistas y pruebas— y herram
 
 ## Modalidades de auditoría
 
-<br>
-
 | Clasificación | Modalidad | Característica |
 |---|---|---|
 | Responsable | Interna | La realiza personal de la organización. |
 | Responsable | Externa | La realiza una empresa especializada. |
 | Información inicial | Caja negra | Desde fuera y sin credenciales previas. |
 | Información inicial | Caja blanca | Desde dentro, con información privilegiada. |
-
-<br>
 
 Un **test de intrusión (PenTest)** simula un ataque externo autorizado; en los apuntes se presenta como auditoría de caja negra.
 
@@ -355,7 +323,6 @@ flowchart TD
 | Vulnerabilidades | Nessus, GFI LanGuard, Retina |
 | Exploit | Metasploit |
 | Corrección | Actualizaciones del fabricante |
-
 
 Un **exploit** aprovecha una vulnerabilidad concreta: su cabecera implementa el fallo y su *payload* define la acción posterior.
 
@@ -577,57 +544,113 @@ La seguridad también exige proteger derechos y cumplir obligaciones.
 
 <!-- content: UD01-C07 -->
 
-## Protección de datos: LOPD
+## 8 · Protección de datos personales
 
-La **LOPD (Ley Orgánica 15/1999)** protege los derechos fundamentales relacionados con los datos personales, especialmente la intimidad.
+El derecho a la protección de datos deriva del **artículo 18.4 de la Constitución Española**: la informática no puede utilizarse para vulnerar el honor y la intimidad.
 
-- Desarrollo reglamentario: **RD 1720/2007**.
-- Organismo supervisor citado: **Agencia Española de Protección de Datos (AEPD)**.
-- Regula finalidades, recogida y derechos de las personas.
+La normativa vigente combina:
 
-Se aplica a datos personales registrados susceptibles de tratamiento y a tratamientos sujetos a la legislación española.
-
----
-
-<!-- content: UD01-C07 -->
-
-## Ámbito y niveles de seguridad
-
-No se aplica, según los apuntes, a ficheros exclusivamente domésticos ni a materias clasificadas.
-
-El fichero recibe el **nivel más alto** correspondiente a sus datos:
-
-| Nivel | Ejemplo |
+| Norma | Función |
 |---|---|
-| Básico | Datos identificativos |
-| Medio | Datos relativos a infracciones |
-| Alto | Salud, ideología o afiliación sindical |
+| **RGPD** · Reglamento (UE) 2016/679 | Marco común europeo, aplicable desde el 25 de mayo de 2018. |
+| **LOPDGDD** · Ley Orgánica 3/2018 | Adapta el RGPD a España y reconoce derechos digitales. |
+| **AEPD** | Autoridad española de control: supervisa, atiende reclamaciones y sanciona. |
+
+<span class="muted">La antigua LOPD 15/1999 y el RD 1720/2007 están derogados.</span>
 
 ---
 
 <!-- content: UD01-C07 -->
 
-## Infracciones, sanciones y derechos
+## Conceptos y principios del RGPD
 
-| Gravedad | Rango indicado | Ejemplo |
-|---|---:|---|
-| Leve | 900–40.000 € | Recoger datos sin informar |
-| Grave | 40.001–300.000 € | Usar el fichero para otra finalidad |
-| Muy grave | 300.001–600.000 € | Recoger datos protegidos sin autorización |
+- **Dato personal**: información sobre una persona identificada o identificable: nombre, DNI, foto, correo, matrícula o IP.
+- **Tratamiento**: recoger, guardar, consultar, modificar, comunicar o borrar datos.
+- **Categorías especiales**: salud, ideología, religión, origen étnico, afiliación sindical, orientación sexual, datos genéticos y biométricos; su tratamiento exige una excepción legal.
+- **Consentimiento**: libre, informado, específico e inequívoco; no valen casillas premarcadas.
 
-Las personas pueden ejercer **acceso, rectificación, cancelación y oposición**. El responsable del fichero debe controlar accesos y aplicar medidas.
+| Principio | Aplicación práctica |
+|---|---|
+| Licitud, lealtad y transparencia | Informar y contar con una base legal. |
+| Limitación de finalidad | Usar los datos solo para el fin indicado. |
+| Minimización y exactitud | Pedir lo necesario y mantenerlo correcto. |
+| Conservación limitada | No conservarlos más tiempo del preciso. |
+| Integridad y confidencialidad | Aplicar medidas técnicas y organizativas. |
+| Responsabilidad proactiva | Poder demostrar el cumplimiento. |
 
 ---
 
 <!-- content: UD01-C07 -->
 
-## Ejercicio · clasificar una situación
+## Figuras que intervienen
 
-Una empresa utiliza datos de clientes para una finalidad distinta de la que justificó su recogida. ¿Qué ámbito se afecta y qué tipo de infracción señala la tabla de la unidad?
+```mermaid
+flowchart LR
+    I[Interesado] -->|ejerce derechos| R[Responsable]
+    R -->|contrata y supervisa| E[Encargado]
+    D[DPD / DPO] -->|asesora y supervisa| R
+    AEPD[Autoridad de control] -->|vigila y sanciona| R
+```
+
+| Figura | Función | Ejemplo en un instituto |
+|---|---|---|
+| **Interesado** | Persona cuyos datos se tratan. | Alumno o familia. |
+| **Responsable** | Decide para qué y cómo se tratan. | Centro o Consejería. |
+| **Encargado** | Trata datos por cuenta del responsable, con contrato. | Plataforma educativa en la nube. |
+| **DPD/DPO** | Asesora y supervisa el cumplimiento. | DPD de la Consejería. |
+
+---
+
+<!-- content: UD01-C07 -->
+
+## Derechos: de ARCO a ARSOL/ARCO+
+
+La persona puede solicitar gratuitamente, normalmente con respuesta en **un mes**:
+
+| Derecho | Qué permite |
+|---|---|
+| **Acceso** | Saber qué datos se tratan, para qué y obtener una copia. |
+| **Rectificación** | Corregir datos inexactos o incompletos. |
+| **Supresión** | Borrar datos cuando ya no son necesarios: derecho al olvido. |
+| **Oposición** | Oponerse a tratamientos, como la publicidad. |
+| **Limitación** | Congelar el uso mientras se resuelve una reclamación. |
+| **Portabilidad** | Recibir los datos en formato estándar y trasladarlos. |
+| **No decisiones automatizadas** | No quedar sometido a una decisión importante tomada solo por un algoritmo. |
+
+**ARCO** era acceso, rectificación, cancelación y oposición. El RGPD sustituye cancelación por **supresión** y añade limitación y portabilidad: **ARSOL/ARCO+**.
+
+---
+
+<!-- content: UD01-C07 -->
+
+## Seguridad, brechas y sanciones
+
+El RGPD no establece niveles cerrados: exige un **enfoque de riesgo** y medidas apropiadas, como permisos mínimos, cifrado, seudonimización, copias y revisión periódica.
+
+- Mantener un **registro de actividades de tratamiento**.
+- Notificar una brecha a la AEPD en un máximo de **72 horas**; si el riesgo es alto, también a las personas afectadas.
+- Realizar una evaluación de impacto antes de tratamientos de alto riesgo.
+
+| Incumplimiento | Límite máximo RGPD |
+|---|---:|
+| Obligaciones del responsable/encargado | 10 M€ o 2 % de facturación mundial |
+| Principios, consentimiento o derechos | 20 M€ o 4 % de facturación mundial |
+
+Se aplica siempre la cantidad mayor. La LOPDGDD clasifica además las infracciones como leves, graves o muy graves.
+
+---
+
+<!-- content: UD01-C07 -->
+
+## Ejercicio · respuesta ante una brecha
+
+Una academia pierde un portátil sin cifrar con datos de alumnado. No sabe qué tratamientos tiene registrados y espera varias semanas antes de avisar.
+
+Identifica al responsable, dos medidas incumplidas y el plazo de notificación.
 
 <details><summary>Ver solución</summary>
 
-Afecta a la protección de datos personales y, según la tabla de los apuntes, corresponde a una **infracción grave** por utilizar el fichero para una finalidad distinta.
+La academia es el **responsable** si decide la finalidad y los medios. Incumple la aplicación de medidas apropiadas —por ejemplo, cifrado y control de acceso— y la obligación de mantener el registro de actividades. Debe valorar la brecha y notificarla a la AEPD, cuando proceda, en un máximo de **72 horas** desde que la conoce; con riesgo alto, informará también a las personas afectadas.
 
 </details>
 
@@ -635,55 +658,98 @@ Afecta a la protección de datos personales y, según la tabla de los apuntes, c
 
 <!-- _class: lead -->
 
-# 6b · Servicios de la sociedad de la información
+# 9 · Propiedad intelectual y software
 ### UD01-C08
 
-Obligaciones para prestar servicios y contratar por vía electrónica.
+Usar, copiar, modificar y distribuir software depende de sus derechos y de la licencia.
 
 ---
 
 <!-- content: UD01-C08 -->
 
-## LSSI-CE: servicios y comercio electrónico
+## LPI: qué protege
 
-La **Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE)** regula los servicios de la sociedad de la información y la contratación electrónica.
+La **Ley de Propiedad Intelectual (LPI)** protege las creaciones originales, incluido el software. El titular decide, dentro de los límites legales, cómo se reproduce, distribuye, comunica y transforma la obra.
 
-| Aspecto | Obligación o efecto |
+| Tipo de derecho | Características | Ejemplo |
+|---|---|---|
+| **Moral** | Vinculado al autor; reconocimiento de autoría e integridad de la obra. | Exigir que se cite al autor. |
+| **Patrimonial** | Permite explotar la obra y autorizar usos. | Copiar, distribuir o transformar un programa. |
+
+En software, comprar una copia o acceder a una descarga **no equivale** a adquirir todos los derechos de explotación.
+
+---
+
+<!-- content: UD01-C08 -->
+
+## Licencias de software
+
+La licencia concreta qué puede hacer legalmente quien recibe el programa:
+
+| Familia | Permisos y límites habituales |
 |---|---|
-| Información | Nombre, domicilio, correo, NIF y precios |
-| Contratos electrónicos | Plena validez legal |
-| Intermediarios | Exención condicionada si no existe conocimiento efectivo de ilicitud |
+| **Privativa** | El titular conserva el control; puede limitar copia, modificación, acceso al código y redistribución. |
+| **Libre / copyleft** | Permite usar, estudiar, modificar y redistribuir; el copyleft exige conservar libertades y licencia en las versiones derivadas. |
+| **Libre permisiva** | Permite reutilizar y redistribuir con pocas condiciones; suele admitir combinar el código con software privativo. |
 
-La documentación de la unidad menciona la **CMT** en la regulación de mercados de comunicaciones electrónicas y servicios audiovisuales.
+**Código abierto** describe la disponibilidad del código y las condiciones de la licencia; no significa automáticamente que no existan obligaciones.
+
+---
+
+<!-- content: UD01-C08 -->
+
+## Comparar licencias antes de reutilizar
+
+Antes de copiar una biblioteca o un programa hay que comprobar:
+
+1. si la licencia permite el uso previsto;
+2. si exige conservar avisos de autoría o incluir el texto de la licencia;
+3. si obliga a publicar las modificaciones con la misma licencia;
+4. si permite distribuir el resultado junto con software privativo.
+
+> **Regla práctica:** que un código esté publicado en Internet no autoriza a copiarlo sin revisar sus derechos y condiciones.
+
+---
+
+<!-- content: UD01-C08 -->
+
+## Ejercicio · elegir una licencia
+
+Un equipo quiere publicar una biblioteca, permitir su uso en proyectos privativos y exigir que las versiones modificadas mantengan las mismas libertades. ¿Qué familia de licencia encaja mejor? ¿Qué debe comprobar antes de reutilizar otra biblioteca?
+
+<details><summary>Ver solución</summary>
+
+La primera condición —uso en proyectos privativos— encaja mejor con una licencia **libre permisiva**. La segunda —obligar a mantener las mismas libertades en las versiones derivadas— es propia del **copyleft**; por tanto, ambas exigencias deben analizarse porque pueden entrar en conflicto. Antes de reutilizar una dependencia hay que revisar su licencia, las obligaciones de atribución, redistribución y compatibilidad.
+
+</details>
 
 ---
 
 <!-- content: UD01-C07, UD01-C08 -->
 
-## LOPD y LSSI-CE: no regulan lo mismo
+## Protección de datos y propiedad intelectual: no regulan lo mismo
 
-| | LOPD | LSSI-CE |
+| | RGPD + LOPDGDD | LPI y licencia de software |
 |---|---|---|
-| Objeto | Protección del dato personal | Servicios de la sociedad de la información y comercio electrónico |
-| Pregunta central | ¿Cómo se trata y protege el dato? | ¿Qué obligaciones tiene quien presta el servicio? |
-| Organismo citado | AEPD | CMT, según la documentación |
-| Criterios | RA5.a–RA5.d | RA5.e |
+| Objeto | Datos personales y derechos de las personas. | Obras, autoría y explotación del software. |
+| Pregunta central | ¿Puedo tratar estos datos y con qué garantías? | ¿Puedo copiar, modificar o distribuir este código? |
+| Riesgo típico | Brecha, uso sin base legal o pérdida de derechos. | Copia o redistribución sin autorización. |
 
-Una tienda online puede quedar sometida a **ambas**: una ley protege los datos de sus clientes y la otra regula el servicio y la contratación electrónica.
+Un proyecto puede estar sometido a ambos marcos: por ejemplo, una aplicación puede tratar datos personales y, al mismo tiempo, incorporar bibliotecas con licencias que deben respetarse.
 
 ---
 
 <!-- content: UD01-C08 -->
 
-## Ejercicio · tienda online
+## Ejercicio · aplicación web
 
-Una tienda no muestra su domicilio ni NIF, pero acepta pedidos electrónicos. Además, almacena datos de clientes.
+Una empresa incorpora una biblioteca publicada en Internet, elimina el aviso de autoría y usa datos de clientes para entrenar una función sin informarles.
 
-¿Qué ley se relaciona con cada problema?
+¿Qué dos ámbitos legales aparecen y qué debería revisar la empresa?
 
 <details><summary>Ver solución</summary>
 
-La falta de información obligatoria y la contratación electrónica se relacionan con la **LSSI-CE**. El almacenamiento y protección de datos personales se relacionan con la **LOPD**. Ambas pueden aplicarse simultáneamente.
+En propiedad intelectual, debe revisar la licencia de la biblioteca y conservar las obligaciones de autoría y redistribución; eliminar el aviso puede incumplirla. En protección de datos, debe identificar la base legal, informar de la finalidad, aplicar minimización y seguridad, y respetar los derechos de las personas. Son obligaciones distintas y pueden aplicarse simultáneamente.
 
 </details>
 
