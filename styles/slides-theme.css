@@ -96,4 +96,11 @@ section.tiny {
 .muted { 
   color: #6b7280; 
 }
-
+section table{
+  margin: 30px auto;
+}
+section summary{
+  cursor: pointer;
+  color: #1e3a8a;
+  margin: 10px 0;
+}
