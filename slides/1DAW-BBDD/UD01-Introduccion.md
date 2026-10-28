@@ -90,10 +90,6 @@ style: |
   section.portada header, section.portada footer,
   section.seccion header, section.seccion footer { color: #9fb2c8; }
   section.portada::after, section.seccion::after { color: #9fb2c8; }
-  section.cols { 
-    columns: 2; 
-    column-gap: 40px; 
-  }
 
 ---
 
@@ -250,6 +246,7 @@ flowchart LR
 **Ejemplo:** para localizar la clave `004` en 10 000 registros, el peor caso exige examinar los 10 000. La estructura es simple, pero no adecuada para muchas consultas aleatorias.
 
 ---
+<!-- _footer: "" -->
 
 # Organización indexada
 
@@ -261,9 +258,6 @@ flowchart TD
     I --> P["Localizar página"] --> R["Leer registro"]
     D["Datos ordenados: 001 ... 050 ... 099"] --> R
 ```
----
-
-# Organización indexada
 
 - **Índice primario:** suele construirse sobre la clave de ordenación.
 - **Índice secundario:** acelera búsquedas por otros atributos, por ejemplo `APELLIDOS`.
@@ -271,13 +265,10 @@ flowchart TD
 - Ventaja: combina recorrido ordenado y acceso directo razonable.
 - Coste: espacio adicional, mantenimiento y posibles páginas de desbordamiento.
 
-</div>
-</div>
-
 > Un índice no es otra copia completa que sustituya a los datos: es una estructura auxiliar para encontrarlos mejor.
 ---
 
-# Sistema gestor de fichero: Definición y ejemplo
+# Definición y ejemplo
 
 > **Sistema gestor de ficheros:** sistema de almacenamiento en el que los datos se guardan en archivos con una estructura particular.
 
@@ -792,89 +783,6 @@ GRANT SELECT ON Alumnos TO profesor_matematicas;
 
 </div>
 </div>
-
----
-
-<!-- _class: portada -->
-<!-- _paginate: false -->
-
-# Roles en un sistema de base de datos
-
-DA · DBA · Programador de aplicaciones · Usuario final
-
----
-
-# Administrador de Datos (DA)
-
-Perfil **estratégico y de gestión**, más que técnico.
-
-- Decide **qué datos** necesita la organización y qué significan
-- Asigna responsables a cada conjunto de datos
-- Define políticas de **calidad, privacidad y normativa** (RGPD)
-- Diseña el modelo de datos a nivel **conceptual**
-- No suele trabajar directamente con el SGBD
-
-> El DA decide **el "qué"**
-
----
-
-# Administrador de la Base de Datos (DBA)
-
-Perfil **técnico** responsable de que la BD funcione.
-
-- Implementa físicamente lo que define el DA (tablas, índices…)
-- Gestiona **usuarios y permisos**
-- Realiza **copias de seguridad** y restauraciones
-- Monitoriza y **optimiza el rendimiento**
-- Actualiza el SGBD y resuelve incidencias
-
-> El DBA se ocupa **del "cómo"**
-
----
-
-# Programador de aplicaciones
-
-Desarrolla los **programas que acceden a la base de datos**.
-
-- Aplicaciones web, de escritorio o móviles
-- Informes y servicios
-- Escribe el código y las **consultas SQL** que leen, insertan, modifican o borran datos
-
-> Es el **puente** entre la base de datos y el usuario final
-
----
-
-# Usuario final
-
-Utiliza la información para su trabajo, normalmente **a través de aplicaciones**, sin conocer la estructura interna de la BD.
-
-| Tipo | Características |
-|---|---|
-| **Ocasional** | Consultas puntuales, a veces con herramientas de informes |
-| **Paramétrico** | Operaciones repetitivas y predefinidas (cajero, secretaría) |
-| **Sofisticado** | Lanza consultas directamente, por ejemplo con SQL |
-
----
-
-# Ejemplo: el instituto
-
-| Rol | Qué haría |
-|---|---|
-| **DA** | Decide que el DNI identifica a cada alumno y que solo Secretaría modifica las direcciones |
-| **DBA** | Crea las tablas en PostgreSQL, da permisos a cada departamento y programa copias nocturnas |
-| **Programador** | Desarrolla la app de préstamos de la biblioteca y la de reservas del comedor |
-| **Usuario final** | La bibliotecaria registra un préstamo; el jefe de estudios consulta un listado |
-
----
-
-# Resumen
-
-| Rol | Enfoque | Pregunta clave |
-|---|---|---|
-| **DA** | Gestión y políticas | ¿Qué datos necesitamos y quién responde de ellos? |
-| **DBA** | Técnico, SGBD | ¿Cómo almacenamos y protegemos los datos? |
-| **Programador** | Desarrollo | ¿Cómo accede la aplicación a los datos? |
-| **Usuario final** | Uso | ¿Qué información necesito para mi trabajo? |
 
 ---
 
