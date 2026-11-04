@@ -210,7 +210,7 @@ Una vulnerabilidad puede registrarse mediante un **CVE** (*Common Vulnerabilitie
 
 <!-- content: UD01-C02 -->
 
-## Atacantes y tipos de ataque
+## Atacantes
 
 | Perfil | Objetivo descrito en la unidad |
 |---|---|
@@ -219,7 +219,16 @@ Una vulnerabilidad puede registrarse mediante un **CVE** (*Common Vulnerabilitie
 | Crasher | Provocar que un sistema deje de funcionar. |
 | Hacker | Saltarse la seguridad para acceder a información. |
 
-Los ataques pueden ser **internos** —personal o ex-personal con conocimiento del sistema— o **externos**. También pueden explotar bugs, malware, amenazas físicas o ingeniería social.
+Los ataques pueden ser **internos** —personal o ex-personal con conocimiento del sistema— o **externos**. 
+
+---
+
+## Tipos de ataque
+
+- **Aprovechamiento de software incorrecto**: se explotan fallos (*bugs*) de un programa. Se mitiga con sistemas de actualización y detección de intrusos.
+- **Virus, troyanos y gusanos**: software que se ejecuta sin autorización para crear puertas traseras, dañar datos o reproducirse masivamente.
+- **Amenazas físicas**: daños sobre el propio hardware.
+- **Ataques basados en ingeniería social**: no explotan una debilidad técnica, sino la confianza del usuario.
 
 ---
 
