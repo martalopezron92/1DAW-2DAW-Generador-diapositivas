@@ -56,6 +56,9 @@ style: |
   section.transicion p, section.transicion li { color: #e6f4ea; font-size: 26px; }
   section.transicion strong { color: #f3e3a4; }
   section.transicion::after { color: #d9f2e0; }
+  table{
+    margin: 20px auto;
+  }
 ---
 
 <!--
