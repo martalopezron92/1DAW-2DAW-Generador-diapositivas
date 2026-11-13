@@ -243,7 +243,7 @@ Siempre debe existir **al menos un atributo identificador**. A los atributos ide
 
 ## 2.1. Atributos · Otra clasificación según su estructura
 
-> 💡 **Contenido añadido.** Además de identificadores y descriptores, los atributos se clasifican según **cómo son sus valores**:
+> 💡 Además de identificadores y descriptores, los atributos se clasifican según **cómo son sus valores**:
 
 | Tipo | Qué significa | Ejemplo |
 |---|---|---|
