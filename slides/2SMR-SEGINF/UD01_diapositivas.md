@@ -210,7 +210,7 @@ Una vulnerabilidad puede registrarse mediante un **CVE** (*Common Vulnerabilitie
 
 <!-- content: UD01-C02 -->
 
-## Atacantes y tipos de ataque
+## Atacantes
 
 | Perfil | Objetivo descrito en la unidad |
 |---|---|
@@ -219,7 +219,16 @@ Una vulnerabilidad puede registrarse mediante un **CVE** (*Common Vulnerabilitie
 | Crasher | Provocar que un sistema deje de funcionar. |
 | Hacker | Saltarse la seguridad para acceder a información. |
 
-Los ataques pueden ser **internos** —personal o ex-personal con conocimiento del sistema— o **externos**. También pueden explotar bugs, malware, amenazas físicas o ingeniería social.
+Los ataques pueden ser **internos** —personal o ex-personal con conocimiento del sistema— o **externos**. 
+
+---
+
+## Tipos de ataque
+
+- **Aprovechamiento de software incorrecto**: se explotan fallos (*bugs*) de un programa. Se mitiga con sistemas de actualización y detección de intrusos.
+- **Virus, troyanos y gusanos**: software que se ejecuta sin autorización para crear puertas traseras, dañar datos o reproducirse masivamente.
+- **Amenazas físicas**: daños sobre el propio hardware.
+- **Ataques basados en ingeniería social**: no explotan una debilidad técnica, sino la confianza del usuario.
 
 ---
 
@@ -231,10 +240,10 @@ Un mensaje promete descubrir quiénes son los principales seguidores y enlaza a 
 
 **Análisis:**
 
-- amenaza: suplantación y propagación;
-- vulnerabilidad: confianza del usuario y permisos excesivos;
-- ataque: entrega de credenciales y autorización;
-- impacto: publicaciones virales y exposición de contactos.
+- **amenaza**: un ciberdelincuente que usa ingeniería social, en concreto phishing a través de una aplicación fraudulenta, para robar cuentas y datos;
+- **vulnerabilidad**: la curiosidad del usuario y su falta de formación, que le llevan a confiar en una promesa imposible. A eso se suma que concede permisos excesivos sin revisarlos y que da su contraseña a una aplicación de terceros;
+- **ataque**: el engaño en sí. El mensaje cebo enlaza a la aplicación, la víctima introduce sus credenciales y autoriza que la aplicación publique en su nombre y acceda a sus contactos;
+- **impacto**: publicaciones virales y exposición de contactos.
 
 > La ingeniería social manipula a la persona: no necesita explotar un fallo técnico para ser eficaz.
 
@@ -455,9 +464,9 @@ La **confidencialidad** garantiza que la información solo esté disponible para
 
 En una transmisión deben combinarse:
 
-- **cifrado** de las comunicaciones;
-- **autenticación de los extremos** para reducir suplantaciones;
-- **control de acceso** a los servicios de red.
+- **cifrado** de las comunicaciones - *¿puede leer alguien lo que se transmite?*
+- **autenticación de los extremos** para reducir suplantaciones - *¿es quien dice ser?*
+- **control de acceso** a los servicios de red - *¿tiene permiso para usar este servicio?*
 
 > Si un interceptor obtiene datos cifrados, no debería poder interpretarlos sin la clave adecuada.
 
@@ -544,7 +553,7 @@ La seguridad también exige proteger derechos y cumplir obligaciones.
 
 <!-- content: UD01-C07 -->
 
-## 8 · Protección de datos personales
+## Protección de datos personales
 
 El derecho a la protección de datos deriva del **artículo 18.4 de la Constitución Española**: la informática no puede utilizarse para vulnerar el honor y la intimidad.
 
@@ -658,7 +667,7 @@ La academia es el **responsable** si decide la finalidad y los medios. Incumple 
 
 <!-- _class: lead -->
 
-# 9 · Propiedad intelectual y software
+# 7 · Propiedad intelectual y software
 ### UD01-C08
 
 Usar, copiar, modificar y distribuir software depende de sus derechos y de la licencia.
