@@ -70,106 +70,13 @@ flowchart LR
 
 # Bloque A
 
-## Alcance, autorización y ética
-
----
-
-<!-- _class: pregunta -->
-
-## T1 · La norma de oro
-
-### ★ ¿Qué?
-¿Qué comprobasteis **antes** de lanzar el primer escaneo?
-
-### ★★ ¿Por qué?
-Si un ciberdelincuente y un hacker ético usan las mismas herramientas, ¿qué los diferencia?
-
-<!-- ★★★ (oral): Si por error escaneas la red del centro, ¿qué consecuencias tendría y qué harías? → Art. 197 bis CP; parar, comunicarlo y documentarlo, nunca ocultarlo. -->
-
----
-
-<!-- _class: respuesta -->
-
-## T1 · Respuesta esperada
-
-### ★ Antes del primer escaneo
-Que la IP de DC-1 (`10.0.1.50`) estaba dentro del rango autorizado `10.0.1.0/24` de `labnet` y dentro del alcance del encargo.
-
-### ★★ Hacker ético frente a ciberdelincuente
-La **autorización** expresa y el **alcance** pactado. La técnica es la misma; cambian el permiso, la finalidad (mejorar la seguridad) y el informe al cliente.
-
-<div class="alarma">⚠️ <b>Error frecuente:</b> «No pasa nada si solo es un escaneo» o «si no rompes nada, no es delito».</div>
-
----
-
-<!-- _class: pregunta -->
-
-## T2 · El aislamiento de la máquina vulnerable
-
-### ★ ¿Qué?
-¿A qué red estaba conectada DC-1 y a cuál **no** podía conectarse nunca?
-
-### ★★ ¿Por qué?
-¿Qué riesgo concreto habría si DC-1 estuviera en **modo puente**?
-
-<!-- ★★★ (oral): En una auditoría real no hay labnet. ¿Qué documento sustituye a la norma de oro y qué contiene? → Contrato o carta de autorización con reglas de enfrentamiento: objetivos, técnicas permitidas, fechas, contactos de emergencia, tratamiento de la información. -->
-
----
-
-<!-- _class: respuesta -->
-
-## T2 · Respuesta esperada
-
-### ★ Redes de DC-1
-Solo a la red interna `labnet`. Nunca en NAT ni en adaptador puente: sin salida a Internet ni a la red del centro.
-
-### ★★ Riesgo del modo puente
-DC-1 es **deliberadamente vulnerable**: cualquier equipo de la red del centro (o un atacante externo) podría comprometerla y usarla como **punto de salto** contra otros equipos.
-
-<div class="alarma">⚠️ <b>Error frecuente:</b> no distinguir la red de Kali (NAT + <code>labnet</code>) de la de DC-1 (solo <code>labnet</code>).</div>
-
----
-
-<!-- _class: pregunta -->
-
-## T3 · La prohibición de la denegación de servicio
-
-### ★ ¿Qué?
-El encargo prohibía los ataques de denegación de servicio. ¿Qué es un ataque **DoS**?
-
-### ★★ ¿Por qué?
-¿Qué principio de seguridad rompe y por qué un cliente no lo querría en una auditoría?
-
-<!-- ★★★ (oral): ¿Qué pasaría legalmente contra una web real sin permiso? → Daños informáticos u obstaculización de sistemas (art. 264 CP) y responsabilidad civil, aunque sea «para probar». -->
-
----
-
-<!-- _class: respuesta -->
-
-## T3 · Respuesta esperada
-
-### ★ Ataque DoS
-Un ataque que busca **dejar un servicio inutilizable** para sus usuarios legítimos, saturándolo o haciéndolo fallar.
-
-### ★★ Principio y motivo
-Rompe la **disponibilidad**. En producción supone parar el negocio (ventas, atención al cliente). La auditoría debe demostrar el riesgo **sin causar daño**.
-
-<div class="alarma">⚠️ <b>Error frecuente:</b> confundir denegación de servicio con «denegar el acceso a un usuario».</div>
-
----
-
-<!-- _class: lead -->
-<!-- _paginate: false -->
-
-# Bloque B
-
 ## Fase 1 · Reconocimiento y enumeración
 
 ---
 
 <!-- _class: pregunta -->
 
-## T4 · `netdiscover` antes que `nmap`
+## T1 · `netdiscover` antes que `nmap`
 
 ### ★ ¿Qué?
 ¿Qué hace `sudo netdiscover -r 10.0.1.0/24`?
@@ -183,7 +90,7 @@ Rompe la **disponibilidad**. En producción supone parar el negocio (ventas, ate
 
 <!-- _class: respuesta -->
 
-## T4 · Respuesta esperada
+## T1 · Respuesta esperada
 
 ### ★ `netdiscover`
 Descubre qué equipos están **vivos** en `10.0.1.0/24` y muestra su IP y su MAC. Así se localizó DC-1 (`10.0.1.50`).
@@ -197,7 +104,7 @@ Primero hay que saber **qué hay** (qué IP atacar) y luego **qué servicios tie
 
 <!-- _class: pregunta -->
 
-## T5 · Lo que revela un `ping`
+## T2 · Lo que revela un `ping`
 
 ### ★ ¿Qué?
 ¿Para qué hicisteis `ping -c2 10.0.1.50`?
@@ -211,7 +118,7 @@ La respuesta tenía **TTL 64**. ¿Qué se deduce y por qué es una **deducción*
 
 <!-- _class: respuesta -->
 
-## T5 · Respuesta esperada
+## T2 · Respuesta esperada
 
 ### ★ El `ping`
 Para confirmar que DC-1 **responde** antes de escanearla (conectividad).
@@ -230,7 +137,7 @@ Probablemente es **Linux**: Linux usa TTL inicial 64 y Windows, 128. No es segur
 
 <!-- _class: pregunta -->
 
-## T6 · Las opciones de `nmap`
+## T3 · Las opciones de `nmap`
 
 ### ★ ¿Qué?
 ¿Qué hace cada opción de `nmap -sV -sC -oN dc1_nmap.txt 10.0.1.50`?
@@ -244,7 +151,7 @@ Probablemente es **Linux**: Linux usa TTL inicial 64 y Windows, 128. No es segur
 
 <!-- _class: respuesta -->
 
-## T6 · Respuesta esperada
+## T3 · Respuesta esperada
 
 ### ★ Opciones de `nmap`
 
@@ -263,7 +170,7 @@ La **versión** permite buscar vulnerabilidades conocidas (CVE). Saber que hay �
 
 <!-- _class: pregunta -->
 
-## T7 · ¿Qué servicio atacar primero?
+## T4 · ¿Qué servicio atacar primero?
 
 ### ★ ¿Qué?
 ¿Qué **tres puertos** estaban abiertos en DC-1 y qué servicio había en cada uno?
@@ -277,7 +184,7 @@ La **versión** permite buscar vulnerabilidades conocidas (CVE). Saber que hay �
 
 <!-- _class: respuesta -->
 
-## T7 · Respuesta esperada
+## T4 · Respuesta esperada
 
 ### ★ Puertos abiertos
 
@@ -297,7 +204,7 @@ La **versión** permite buscar vulnerabilidades conocidas (CVE). Saber que hay �
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-# Bloque C
+# Bloque B
 
 ## Fase 2 · Análisis de vulnerabilidades
 
@@ -305,7 +212,7 @@ La **versión** permite buscar vulnerabilidades conocidas (CVE). Saber que hay �
 
 <!-- _class: pregunta -->
 
-## T8 · CVE y CVSS
+## T5 · CVE y CVSS
 
 ### ★ ¿Qué?
 ¿Qué es un **CVE** y qué es el **CVSS**?
@@ -319,7 +226,7 @@ La **versión** permite buscar vulnerabilidades conocidas (CVE). Saber que hay �
 
 <!-- _class: respuesta -->
 
-## T8 · Respuesta esperada
+## T5 · Respuesta esperada
 
 ### ★ CVE y CVSS
 **CVE**: identificador único y público de una vulnerabilidad concreta (CVE-2018-7600). **CVSS**: sistema que puntúa su **gravedad** de 0 a 10.
@@ -340,7 +247,7 @@ La **versión** permite buscar vulnerabilidades conocidas (CVE). Saber que hay �
 
 <!-- _class: pregunta -->
 
-## T9 · `searchsploit` y la verificación de fuentes
+## T6 · `searchsploit` y la verificación de fuentes
 
 ### ★ ¿Qué?
 ¿Qué hace `searchsploit drupal 7`?
@@ -354,7 +261,7 @@ La **versión** permite buscar vulnerabilidades conocidas (CVE). Saber que hay �
 
 <!-- _class: respuesta -->
 
-## T9 · Respuesta esperada
+## T6 · Respuesta esperada
 
 ### ★ `searchsploit`
 Busca en una **copia local de Exploit-DB** los *exploits* públicos que coinciden con «drupal 7».
@@ -368,7 +275,7 @@ La NVD es la **fuente oficial** de la descripción y la puntuación. La IA suele
 
 <!-- _class: pregunta -->
 
-## T10 · Qué es Drupalgeddon2
+## T7 · Qué es Drupalgeddon2
 
 ### ★ ¿Qué?
 ¿Qué significa **RCE** y por qué es peor si es «**sin autenticación**»?
@@ -382,7 +289,7 @@ La NVD es la **fuente oficial** de la descripción y la puntuación. La IA suele
 
 <!-- _class: respuesta -->
 
-## T10 · Respuesta esperada
+## T7 · Respuesta esperada
 
 ### ★ RCE sin autenticación
 **Ejecución remota de código**: el atacante ejecuta órdenes en el servidor a distancia. «Sin autenticación» significa que **no necesita ninguna cuenta ni contraseña**.
@@ -396,7 +303,7 @@ Drupal no **sanea** ciertos parámetros con nombres especiales (que empiezan por
 
 <!-- _class: pregunta -->
 
-## T11 · Vulnerabilidad, amenaza, *exploit* y riesgo
+## T8 · Vulnerabilidad, amenaza, *exploit* y riesgo
 
 ### ★ ¿Qué?
 Define **vulnerabilidad**, **amenaza** y ***exploit***.
@@ -410,7 +317,7 @@ Aplica los tres términos a **DC-1**.
 
 <!-- _class: respuesta -->
 
-## T11 · Respuesta esperada
+## T8 · Respuesta esperada
 
 ### ★ Definiciones y ★★ aplicación a DC-1
 
@@ -428,7 +335,7 @@ Aplica los tres términos a **DC-1**.
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-# Bloque D
+# Bloque C
 
 ## Fase 3 · Explotación
 
@@ -436,7 +343,7 @@ Aplica los tres términos a **DC-1**.
 
 <!-- _class: pregunta -->
 
-## T12 · `RHOSTS`, `LHOST` y la conexión inversa
+## T9 · `RHOSTS`, `LHOST` y la conexión inversa
 
 ### ★ ¿Qué?
 ¿Qué valor pusisteis en `RHOSTS` y en `LHOST`, y qué significa cada uno?
@@ -450,7 +357,7 @@ Aplica los tres términos a **DC-1**.
 
 <!-- _class: respuesta -->
 
-## T12 · Respuesta esperada
+## T9 · Respuesta esperada
 
 ### ★ `RHOSTS` y `LHOST`
 
@@ -468,7 +375,7 @@ El *payload* hace que **DC-1 se conecte de vuelta a Kali** (*reverse shell*). Se
 
 <!-- _class: pregunta -->
 
-## T13 · `check` antes de `run`
+## T10 · `check` antes de `run`
 
 ### ★ ¿Qué?
 ¿Qué hace la orden `check` en Metasploit?
@@ -482,7 +389,7 @@ El *payload* hace que **DC-1 se conecte de vuelta a Kali** (*reverse shell*). Se
 
 <!-- _class: respuesta -->
 
-## T13 · Respuesta esperada
+## T11 · Respuesta esperada
 
 ### ★ `check`
 Comprueba si el objetivo **parece vulnerable** sin lanzar el ataque completo. En DC-1 devolvió:
@@ -500,7 +407,7 @@ Se podría **desestabilizar o tumbar** el servicio del cliente (afectar a la **d
 
 <!-- _class: pregunta -->
 
-## T14 · El usuario `www-data`
+## T12 · El usuario `www-data`
 
 ### ★ ¿Qué?
 ¿Con qué usuario se entra en DC-1 tras el *exploit* y cómo lo comprobasteis?
@@ -514,7 +421,7 @@ Se podría **desestabilizar o tumbar** el servicio del cliente (afectar a la **d
 
 <!-- _class: respuesta -->
 
-## T14 · Respuesta esperada
+## T12 · Respuesta esperada
 
 ### ★ Usuario de entrada
 Con **`www-data`**, comprobado con `id`:
@@ -532,7 +439,7 @@ El código se ejecuta **a través del servidor web** Apache, que funciona como `
 
 <!-- _class: pregunta -->
 
-## T15 · La pista de `settings.php`
+## T13 · La pista de `settings.php`
 
 ### ★ ¿Qué?
 La `flag1` decía «*Every good CMS needs a config file*». ¿A qué fichero apunta y qué contiene?
@@ -546,7 +453,7 @@ La `flag1` decía «*Every good CMS needs a config file*». ¿A qué fichero apu
 
 <!-- _class: respuesta -->
 
-## T15 · Respuesta esperada
+## T13 · Respuesta esperada
 
 ### ★ El fichero
 **`settings.php`**, el fichero de configuración de Drupal, que contiene las **credenciales de la base de datos**.
@@ -561,7 +468,7 @@ Las credenciales están **en claro** y el fichero es **legible por `www-data`**:
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-# Bloque E
+# Bloque D
 
 ## Fase 4 · Posexplotación y escalada
 
@@ -569,7 +476,7 @@ Las credenciales están **en claro** y el fichero es **legible por `www-data`**:
 
 <!-- _class: pregunta -->
 
-## T16 · Estabilizar la *shell*
+## T14 · Estabilizar la *shell*
 
 ### ★ ¿Qué?
 ¿Para qué se ejecutó `python -c 'import pty;pty.spawn("/bin/bash")'`?
@@ -583,7 +490,7 @@ Las credenciales están **en claro** y el fichero es **legible por `www-data`**:
 
 <!-- _class: respuesta -->
 
-## T16 · Respuesta esperada
+## T14 · Respuesta esperada
 
 ### ★ `pty.spawn`
 Para obtener una ***shell* interactiva** estable, con *prompt*, en lugar de la *shell* básica que da el *exploit*.
@@ -603,7 +510,7 @@ Para obtener una ***shell* interactiva** estable, con *prompt*, en lugar de la *
 
 <!-- _class: pregunta -->
 
-## T17 · El bit SUID
+## T15 · El bit SUID
 
 ### ★ ¿Qué?
 ¿Qué es el bit **SUID**?
@@ -617,7 +524,7 @@ Para obtener una ***shell* interactiva** estable, con *prompt*, en lugar de la *
 
 <!-- _class: respuesta -->
 
-## T17 · Respuesta esperada
+## T15 · Respuesta esperada
 
 ### ★ Bit SUID
 Permiso especial de Linux por el que un programa se ejecuta **con los permisos de su propietario**, no con los de quien lo lanza. Si el propietario es `root`, se ejecuta como `root`.
@@ -635,7 +542,7 @@ Permiso especial de Linux por el que un programa se ejecuta **con los permisos d
 
 <!-- _class: pregunta -->
 
-## T18 · La búsqueda de binarios SUID
+## T16 · La búsqueda de binarios SUID
 
 ### ★ ¿Qué?
 Explica pieza a pieza `find / -perm -4000 -type f 2>/dev/null`.
@@ -649,7 +556,7 @@ Explica pieza a pieza `find / -perm -4000 -type f 2>/dev/null`.
 
 <!-- _class: respuesta -->
 
-## T18 · Respuesta esperada
+## T16 · Respuesta esperada
 
 ### ★ Pieza a pieza
 
@@ -669,7 +576,7 @@ Somos un usuario **sin privilegios**: aparecen cientos de errores *Permission de
 
 <!-- _class: pregunta -->
 
-## T19 · La escalada con `find`
+## T17 · La escalada con `find`
 
 ### ★ ¿Qué?
 ¿Qué hace `find . -exec /bin/sh -p \; -quit`?
@@ -683,7 +590,7 @@ Somos un usuario **sin privilegios**: aparecen cientos de errores *Permission de
 
 <!-- _class: respuesta -->
 
-## T19 · Respuesta esperada
+## T17 · Respuesta esperada
 
 ### ★ El comando
 Usa la opción `-exec` de `find` para **abrir una *shell*** (`/bin/sh`); `-quit` hace que se ejecute solo una vez.
@@ -702,7 +609,7 @@ uid=33(www-data) gid=33(www-data) euid=0(root) groups=33(www-data)
 
 <!-- _class: pregunta -->
 
-## T20 · Acceso inicial frente a escalada
+## T18 · Acceso inicial frente a escalada
 
 ### ★ ¿Qué?
 Resume la **cadena de ataque** de DC-1 en tres eslabones.
@@ -716,7 +623,7 @@ Resume la **cadena de ataque** de DC-1 en tres eslabones.
 
 <!-- _class: respuesta -->
 
-## T20 · Respuesta esperada
+## T18 · Respuesta esperada
 
 ### ★ La cadena
 
@@ -739,7 +646,7 @@ flowchart LR
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-# Bloque F
+# Bloque E
 
 ## Hallazgos, recomendaciones y detección
 
@@ -747,7 +654,7 @@ flowchart LR
 
 <!-- _class: pregunta -->
 
-## T21 · Qué es (y qué no es) un hallazgo
+## T19 · Qué es (y qué no es) un hallazgo
 
 ### ★ ¿Qué?
 ¿Por qué «*Hemos entrado con Metasploit*» **no** es un hallazgo?
@@ -761,7 +668,7 @@ Redacta oralmente el hallazgo **H1** con **fallo**, **causa** y **gravedad**.
 
 <!-- _class: respuesta -->
 
-## T21 · Respuesta esperada
+## T19 · Respuesta esperada
 
 ### ★ No es un hallazgo
 Describe lo que hizo el **auditor**, no el **fallo del servidor**. Un hallazgo es una debilidad del sistema auditado.
@@ -780,7 +687,7 @@ Describe lo que hizo el **auditor**, no el **fallo del servidor**. Un hallazgo e
 
 <!-- _class: pregunta -->
 
-## T22 · La huella del ataque
+## T20 · La huella del ataque
 
 ### ★ ¿Qué?
 ¿Qué **huella** ha dejado vuestro ataque en DC-1?
@@ -794,7 +701,7 @@ Describe lo que hizo el **auditor**, no el **fallo del servidor**. Un hallazgo e
 
 <!-- _class: respuesta -->
 
-## T22 · Respuesta esperada
+## T20 · Respuesta esperada
 
 ### ★ Huellas y ★★ dónde buscarlas
 
@@ -811,7 +718,7 @@ Describe lo que hizo el **auditor**, no el **fallo del servidor**. Un hallazgo e
 
 <!-- _class: pregunta -->
 
-## T23 · El resumen ejecutivo
+## T21 · El resumen ejecutivo
 
 ### ★ ¿Qué?
 Explícale a la gerente de Drupalia, **en 30 segundos y sin tecnicismos**, qué habéis encontrado.
@@ -825,7 +732,7 @@ Explícale a la gerente de Drupalia, **en 30 segundos y sin tecnicismos**, qué 
 
 <!-- _class: respuesta -->
 
-## T23 · Respuesta esperada
+## T21 · Respuesta esperada
 
 ### ★ En 30 segundos
 > «Hemos conseguido el **control total** de vuestro servidor web **sin conocer ninguna contraseña**, aprovechando que el programa de la web no estaba actualizado y un permiso mal configurado.»
@@ -840,7 +747,7 @@ Lo lee alguien que **decide**, no que ejecuta. No puede faltar **qué riesgo** s
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-# Bloque G
+# Bloque F
 
 ## Uso crítico de la IA y repaso de la UD01
 
@@ -848,7 +755,7 @@ Lo lee alguien que **decide**, no que ejecuta. No puede faltar **qué riesgo** s
 
 <!-- _class: pregunta -->
 
-## T24 · Cuando la IA se equivoca
+## T22 · Cuando la IA se equivoca
 
 ### ★ ¿Qué?
 ¿En qué se equivocó la IA durante vuestro laboratorio, o en qué **suele** equivocarse?
@@ -862,7 +769,7 @@ Lo lee alguien que **decide**, no que ejecuta. No puede faltar **qué riesgo** s
 
 <!-- _class: respuesta -->
 
-## T24 · Respuesta esperada
+## T22 · Respuesta esperada
 
 ### ★ Errores típicos de la IA
 El **número de CVE**, la **cifra CVSS** (por ejemplo, «10» en lugar de **9,8**) o vías que no aplican (como `sudo -l` en DC-1).
@@ -876,7 +783,7 @@ La IA genera texto **plausible**, no consultado en una fuente: puede «inventar�
 
 <!-- _class: pregunta -->
 
-## T25 · Las fases del test de intrusión
+## T23 · Las fases del test de intrusión
 
 ### ★ ¿Qué?
 Enumera **en orden** las fases de un test de intrusión.
@@ -890,7 +797,7 @@ Sitúa en su fase `netdiscover`, `searchsploit`, `run` y `find / -perm -4000`. �
 
 <!-- _class: respuesta -->
 
-## T25 · Respuesta esperada
+## T23 · Respuesta esperada
 
 ### ★ Las fases
 **Alcance y autorización** → reconocimiento → enumeración → explotación → posexplotación → **documentación** (informe).
@@ -910,7 +817,7 @@ Cada fase **usa la información de la anterior**: sin la versión no se busca el
 
 <!-- _class: pregunta -->
 
-## T26 · De la base de datos a las contraseñas
+## T24 · De la base de datos a las contraseñas
 
 ### ★ ¿Qué?
 Con las credenciales de `settings.php` se podrían ver los ***hashes*** de las contraseñas de los usuarios de Drupal. ¿Qué es un *hash*?
@@ -924,7 +831,7 @@ Entonces, ¿cómo se podría obtener la contraseña **a partir del *hash***?
 
 <!-- _class: respuesta -->
 
-## T26 · Respuesta esperada
+## T24 · Respuesta esperada
 
 ### ★ *Hash*
 Función **unidireccional** que transforma un texto en una huella de longitud fija. **No se puede «descifrar»**: no es cifrado ni codificación.
@@ -950,6 +857,3 @@ Funciona si la contraseña es **débil** o común, como en el caso guiado 3 de l
 
 # Fin de la defensa
 
-## ¿Qué tres conceptos os han costado más?
-
-Anótalos en el apartado 5 de tu **ficha de escucha activa** y repásalos antes de la **prueba individual**.
