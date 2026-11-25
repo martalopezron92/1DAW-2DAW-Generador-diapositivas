@@ -11,7 +11,7 @@ paginate: true
 # UD02
 ## Criptografía
 
-**2 sesiones · RA4 · Criterios RA4.d, RA4.f, RA4.g**
+**RA4 · Criterios RA4.d, RA4.f, RA4.g**
 
 ---
 
