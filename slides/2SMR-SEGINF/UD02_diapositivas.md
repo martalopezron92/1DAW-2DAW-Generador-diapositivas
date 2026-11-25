@@ -35,11 +35,12 @@ La criptografía no impide que intercepten los datos, pero consigue que:
 |---|---|
 | **1** | 1 · Conceptos y objetivos |
 | **1** | 2 · Criptografía clásica: César y Vigenère |
-| **1** | 3 · Criptografía simétrica |
-| **1** | 4 · Funciones hash |
-| **2** | 5 · Criptografía asimétrica y cifrado híbrido |
-| **2** | 6 · Firma digital |
-| **2** | 7 · Certificados digitales, CA, HTTPS y DNIe |
+| **1** | 3 · Funciones hash |
+| **2** | 4 · La pieza central: la clave|
+| **2** | 5 · Criptografía simétrica |
+| **2** | 6 · Criptografía asimétrica y cifrado híbrido |
+| **3** | 7 · Firma digital |
+| **3** | 8 · Certificados digitales, CA, HTTPS y DNIe |
 
 <span class="muted">Cada bloque termina con un ejercicio corto. Las prácticas guiadas de CyberChef y GPG desarrollan lo visto.</span>
 
@@ -171,9 +172,49 @@ A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z
 
 ---
 
+
 <!-- content: UD02-C01 -->
 
-## Cifrado César
+## Transposición: la escítala espartana
+
+Es uno de los primeros cifrados conocidos (Esparta, siglo V a. C.).
+
+1. Se enrolla una **tira** de cuero o papel en espiral alrededor de un **bastón**.
+2. Se escribe el mensaje **a lo largo del bastón**, fila a fila.
+3. Al **desenrollar** la tira, las letras quedan desordenadas.
+4. Solo se puede leer enrollándola en un bastón **del mismo grosor**.
+
+> **La clave es el grosor del bastón**, es decir, cuántas letras caben en cada vuelta. Las letras no cambian: solo cambia su **orden**. Es **transposición**, no sustitución.
+
+---
+
+<!-- content: UD02-C01 -->
+
+## Escítala: ejemplo resuelto
+
+Mensaje `ATACAR AL AMANECER` sin espacios (16 letras). Bastón de **4 letras por vuelta** → 4 filas de 4:
+
+```
+Fila 1:  A  T  A  C
+Fila 2:  A  R  A  L
+Fila 3:  A  M  A  N
+Fila 4:  E  C  E  R
+```
+
+Al desenrollar se lee **por columnas**, de arriba abajo:
+
+```
+AAAE  TRMC  AAAE  CLNR   →   AAAETRMCAAAECLNR
+```
+
+- **Descifrar:** se escribe la tira en columnas de 4 y se lee por filas → `ATACARALAMANECER`.
+- **Bastón equivocado** (2 letras por vuelta): sale `AATMAACNAERCAELR`, sin sentido.
+
+---
+
+<!-- content: UD02-C01 -->
+
+## Sustitución: Cifrado César
 
 Sustitución **monoalfabética**: cada letra se desplaza **k posiciones**. La clave es el número **k**. Tras la Z se vuelve a la A.
 
@@ -213,7 +254,7 @@ Si en el criptograma la letra más frecuente es la **H**, probablemente **H = E*
 
 <!-- content: UD02-C01 -->
 
-## Cifrado Vigenère
+## Sustitución: Cifrado Vigenère
 
 Sustitución **polialfabética**: la clave es una **palabra** y cada letra indica un desplazamiento (A = 0, B = 1, C = 2…). La clave se repite; los espacios no consumen letras.
 
@@ -271,7 +312,147 @@ El **espacio de claves** es el número de claves posibles. Cuanto mayor, más di
 
 <!-- _class: lead -->
 
-# 3 · Criptografía simétrica
+# 3 · Funciones hash
+### UD02-C04
+
+La huella digital de los datos.
+
+---
+
+<!-- content: UD02-C04 -->
+
+## ¿Qué es una función hash?
+
+Una **función hash** (resumen) convierte cualquier dato —una palabra o un archivo de 4 GB— en una **huella de longitud fija**.
+
+```
+"hola"  ──► SHA-256 ──► b221d9dbb083a7f33428d7c2a3c3198ae925614d70210e28716ccaa7cd4ddb79
+"Hola"  ──► SHA-256 ──► e633f4fc79badea1dc5db970cf397c8248bac47cc3acf9915ba60b5d76b0e88f
+```
+
+- SHA-256 siempre produce **256 bits** = **64 caracteres hexadecimales**.
+- Un cambio en **una sola letra** produce un hash totalmente distinto.
+
+> Un hash **no es cifrado**: no usa clave y **no se puede descifrar**.
+
+---
+
+<!-- content: UD02-C04 -->
+
+## Propiedades de un hash criptográfico
+
+| Propiedad | Significado |
+|---|---|
+| **Longitud fija** | La salida mide siempre lo mismo, sea cual sea la entrada. |
+| **Determinista** | La misma entrada da siempre el mismo hash. |
+| **Unidireccional** | Del hash **no se puede** obtener el dato original. |
+| **Efecto avalancha** | Un cambio mínimo (un bit) cambia por completo el hash. |
+| **Resistencia a colisiones** | Es prácticamente imposible encontrar dos entradas con el mismo hash. |
+
+<span class="muted">Las colisiones existen en teoría (infinitas entradas, salidas finitas), pero en un buen algoritmo no se pueden encontrar en la práctica.</span>
+
+---
+
+<!-- content: UD02-C04 -->
+
+## Algoritmos hash
+
+| Algoritmo | Salida | Situación |
+|---|---|---|
+| MD5 | 128 bits | **Roto**: se fabrican colisiones. Solo para detectar errores accidentales. |
+| SHA-1 | 160 bits | **Roto** (colisión práctica en 2017). No usar. |
+| **SHA-256 / SHA-512** (SHA-2) | 256 / 512 bits | **Recomendados.** |
+| SHA-3 | 224–512 bits | Recomendado; diseño distinto a SHA-2. |
+
+**Usos**
+
+- **Integridad** de archivos descargados (comparar con el hash oficial).
+- **Almacenar contraseñas**: se guarda el hash, no la contraseña (con *sal*).
+- **Firma digital**: se firma el hash del documento.
+
+---
+
+<!-- content: UD02-C04 -->
+
+## En la práctica: comprobar la integridad
+
+```bash
+sha256sum presupuesto.txt                         # Linux
+Get-FileHash presupuesto.txt -Algorithm SHA256    # Windows (PowerShell)
+
+echo "HASH_OFICIAL  kali.iso" | sha256sum -c      # comprobación automática
+# kali.iso: OK       → íntegro
+# kali.iso: FAILED   → modificado o corrupto: no usar
+```
+
+> El hash de referencia debe llegar por un **canal distinto y fiable** (la web oficial con HTTPS, por teléfono…). Si un atacante modifica el archivo, también puede modificar un hash que viaje con él.
+
+---
+
+<!-- content: UD02-C04 -->
+
+## Ejercicio · hash
+
+1. Calculas el SHA-256 de un archivo, cambias una coma y lo vuelves a calcular. ¿Qué ocurre?
+2. ¿Se puede "descifrar" un hash? ¿Por qué?
+3. ¿Por qué no se debe usar MD5 para comprobar si alguien ha manipulado un archivo?
+
+<details><summary>Ver solución</summary>
+
+1. Se obtiene un hash completamente distinto (efecto avalancha), con la misma longitud.
+2. No: es unidireccional y no usa clave. Solo se puede probar entradas y comparar (fuerza bruta o diccionario).
+3. Porque está roto: un atacante puede fabricar un archivo distinto con el mismo hash MD5.
+
+</details>
+
+---
+
+<!-- _class: lead -->
+
+# 4 · La pieza central: la clave
+### UD02-C01, UD02-C02, UD02-C03 
+
+---
+
+<!-- content: UD02-C01, UD02-C02, UD02-C03 -->
+
+## La clave
+
+Un sistema de cifrado tiene dos partes, igual que una puerta:
+
+| Parte | Analogía | ¿Es secreta? |
+|---|---|---|
+| **Algoritmo** | El modelo de cerradura | **No.** Es público (César, AES, RSA). |
+| **Clave** | La llave | **Sí.** Toda la seguridad depende de ella. |
+
+Toda la unidad gira en torno a tres preguntas sobre la clave:
+
+1. **¿Es difícil de adivinar?** → longitud de la clave (espacio de claves).
+2. **¿Cuántas claves hay y quién las tiene?** → una compartida o un par.
+3. **¿Cómo llega la clave a la otra persona sin que la roben?**
+
+> Quien tiene la clave tiene la información. Si la clave se pierde, la información se pierde; si la roban, la roban.
+
+---
+
+<!-- content: UD02-C02, UD02-C03 -->
+
+## Tres formas de usar las claves
+
+| | **Simétrico** | **Asimétrico** | **Híbrido** |
+|---|---|---|---|
+| Claves | **Una**, la misma para cifrar y descifrar | **Un par**: pública y privada | Las dos cosas a la vez |
+| Analogía | Caja fuerte con **una llave copiada** para cada uno | **Buzón**: cualquiera echa cartas, solo el dueño tiene la llave | Caja fuerte, y su llave se envía **por el buzón** |
+| Ventaja | Muy rápido | No hay que compartir nada secreto | Rápido **y** sin compartir secretos |
+| Problema | ¿Cómo le doy la llave a la otra persona? | Muy lento | — |
+| Ejemplo | AES, `gpg -c` | RSA, ECC | HTTPS, GPG, WhatsApp |
+
+---
+
+
+<!-- _class: lead -->
+
+# 5 · Criptografía simétrica
 ### UD02-C02
 
 Una sola clave secreta compartida.
@@ -373,104 +554,7 @@ gpg -o recuperado.txt -d secreto.txt.gpg      # descifra
 
 <!-- _class: lead -->
 
-# 4 · Funciones hash
-### UD02-C04
-
-La huella digital de los datos.
-
----
-
-<!-- content: UD02-C04 -->
-
-## ¿Qué es una función hash?
-
-Una **función hash** (resumen) convierte cualquier dato —una palabra o un archivo de 4 GB— en una **huella de longitud fija**.
-
-```
-"hola"  ──► SHA-256 ──► b221d9dbb083a7f33428d7c2a3c3198ae925614d70210e28716ccaa7cd4ddb79
-"Hola"  ──► SHA-256 ──► e633f4fc79badea1dc5db970cf397c8248bac47cc3acf9915ba60b5d76b0e88f
-```
-
-- SHA-256 siempre produce **256 bits** = **64 caracteres hexadecimales**.
-- Un cambio en **una sola letra** produce un hash totalmente distinto.
-
-> Un hash **no es cifrado**: no usa clave y **no se puede descifrar**.
-
----
-
-<!-- content: UD02-C04 -->
-
-## Propiedades de un hash criptográfico
-
-| Propiedad | Significado |
-|---|---|
-| **Longitud fija** | La salida mide siempre lo mismo, sea cual sea la entrada. |
-| **Determinista** | La misma entrada da siempre el mismo hash. |
-| **Unidireccional** | Del hash **no se puede** obtener el dato original. |
-| **Efecto avalancha** | Un cambio mínimo (un bit) cambia por completo el hash. |
-| **Resistencia a colisiones** | Es prácticamente imposible encontrar dos entradas con el mismo hash. |
-
-<span class="muted">Las colisiones existen en teoría (infinitas entradas, salidas finitas), pero en un buen algoritmo no se pueden encontrar en la práctica.</span>
-
----
-
-<!-- content: UD02-C04 -->
-
-## Algoritmos hash
-
-| Algoritmo | Salida | Situación |
-|---|---|---|
-| MD5 | 128 bits | **Roto**: se fabrican colisiones. Solo para detectar errores accidentales. |
-| SHA-1 | 160 bits | **Roto** (colisión práctica en 2017). No usar. |
-| **SHA-256 / SHA-512** (SHA-2) | 256 / 512 bits | **Recomendados.** |
-| SHA-3 | 224–512 bits | Recomendado; diseño distinto a SHA-2. |
-
-**Usos**
-
-- **Integridad** de archivos descargados (comparar con el hash oficial).
-- **Almacenar contraseñas**: se guarda el hash, no la contraseña (con *sal*).
-- **Firma digital**: se firma el hash del documento.
-
----
-
-<!-- content: UD02-C04 -->
-
-## En la práctica: comprobar la integridad
-
-```bash
-sha256sum presupuesto.txt                         # Linux
-Get-FileHash presupuesto.txt -Algorithm SHA256    # Windows (PowerShell)
-
-echo "HASH_OFICIAL  kali.iso" | sha256sum -c      # comprobación automática
-# kali.iso: OK       → íntegro
-# kali.iso: FAILED   → modificado o corrupto: no usar
-```
-
-> El hash de referencia debe llegar por un **canal distinto y fiable** (la web oficial con HTTPS, por teléfono…). Si un atacante modifica el archivo, también puede modificar un hash que viaje con él.
-
----
-
-<!-- content: UD02-C04 -->
-
-## Ejercicio · hash
-
-1. Calculas el SHA-256 de un archivo, cambias una coma y lo vuelves a calcular. ¿Qué ocurre?
-2. ¿Se puede "descifrar" un hash? ¿Por qué?
-3. ¿Por qué no se debe usar MD5 para comprobar si alguien ha manipulado un archivo?
-
-<details><summary>Ver solución</summary>
-
-1. Se obtiene un hash completamente distinto (efecto avalancha), con la misma longitud.
-2. No: es unidireccional y no usa clave. Solo se puede probar entradas y comparar (fuerza bruta o diccionario).
-3. Porque está roto: un atacante puede fabricar un archivo distinto con el mismo hash MD5.
-
-</details>
-
----
-
-<!-- _class: lead -->
-
-# 5 · Criptografía asimétrica
+# 6 · Criptografía asimétrica
 ### UD02-C03
 
 Un par de claves: pública y privada.
@@ -605,7 +689,7 @@ gpg -d msg.asc                                   # Luis descifra con su privada
 
 <!-- _class: lead -->
 
-# 6 · Firma digital
+# 7 · Firma digital
 ### UD02-C05
 
 Autenticación, integridad y no repudio.
@@ -721,7 +805,7 @@ Reglamento europeo **eIDAS** (UE 910/2014) y, en España, **Ley 6/2020**:
 
 <!-- _class: lead -->
 
-# 7 · Certificados digitales
+# 8 · Certificados digitales
 ### UD02-C06
 
 ¿De verdad es suya esta clave pública?
